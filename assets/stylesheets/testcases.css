@@ -1,0 +1,252 @@
+/* Test Cases Summary Widget */
+.testcase-summary {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #f6f6f6;
+  border: 1px solid #d7d7d7;
+}
+
+.testcase-summary h4 {
+  margin-top: 0;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.summary-table {
+  width: 100%;
+  font-size: 12px;
+}
+
+.summary-table th {
+  text-align: center;
+  padding: 5px;
+  background-color: #eeeeee;
+}
+
+.summary-table td {
+  text-align: center;
+  padding: 5px;
+}
+
+.summary-table td.total,
+.summary-table td.pass-rate {
+  font-weight: bold;
+  background-color: #e8f4f8;
+}
+
+/* Test Cases List */
+.test-cases-list {
+  margin-top: 15px;
+}
+
+.testcase-item {
+  border: 1px solid #d7d7d7;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  background-color: #ffffff;
+}
+
+.testcase-item.collapsed {
+  background-color: #f9f9f9;
+}
+
+.testcase-header {
+  padding: 10px 15px;
+  background-color: #f6f6f6;
+  border-bottom: 1px solid #d7d7d7;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.testcase-header:hover {
+  background-color: #eeeeee;
+}
+
+.testcase-item.collapsed .testcase-header {
+  border-bottom: none;
+}
+
+.toggle-icon {
+  font-size: 12px;
+  color: #666;
+  min-width: 15px;
+}
+
+.testcase-id {
+  font-family: monospace;
+  color: #169;
+  font-size: 13px;
+  min-width: 100px;
+}
+
+.testcase-title {
+  flex: 1;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.testcase-updated {
+  font-size: 11px;
+  color: #999;
+  margin-left: auto;
+}
+
+.testcase-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.testcase-actions a {
+  font-size: 12px;
+  padding: 2px 5px;
+}
+
+.testcase-body {
+  padding: 15px;
+}
+
+.testcase-field {
+  margin-bottom: 15px;
+}
+
+.testcase-field strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+  font-size: 12px;
+}
+
+.testcase-field p {
+  margin: 5px 0;
+  line-height: 1.5;
+}
+
+/* Status Badges */
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.status-passed {
+  background-color: #28a745;
+  color: white;
+}
+
+.status-failed {
+  background-color: #dc3545;
+  color: white;
+}
+
+.status-blocked {
+  background-color: #6c757d;
+  color: white;
+}
+
+.status-in-progress {
+  background-color: #007bff;
+  color: white;
+}
+
+.status-not-executed {
+  background-color: #6c757d;
+  color: white;
+}
+
+.status-skipped {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.status-retest {
+  background-color: #fd7e14;
+  color: white;
+}
+
+.status-reopened {
+  background-color: #e83e8c;
+  color: white;
+}
+
+.status-closed {
+  background-color: #20c997;
+  color: white;
+}
+
+.status-default {
+  background-color: #e9ecef;
+  color: #333;
+}
+
+/* Filter and Search Controls */
+.testcase-controls {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #f6f6f6;
+  border: 1px solid #d7d7d7;
+  border-radius: 3px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.testcase-controls label {
+  font-weight: bold;
+  margin-right: 5px;
+  font-size: 12px;
+}
+
+.testcase-controls select,
+.testcase-controls input[type="text"] {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.testcase-controls .control-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.testcase-controls .button-group {
+  margin-left: auto;
+  display: flex;
+  gap: 5px;
+}
+
+.testcase-controls .button-group a {
+  font-size: 12px;
+  padding: 5px 10px;
+}
+
+/* Print View Styles */
+@media print {
+  .contextual,
+  .testcase-actions,
+  .testcase-controls,
+  .toggle-icon {
+    display: none !important;
+  }
+
+  .testcase-body {
+    display: block !important;
+  }
+
+  .testcase-item {
+    page-break-inside: avoid;
+  }
+}
+
+/* No data message */
+p.nodata {
+  padding: 20px;
+  text-align: center;
+  color: #999;
+  font-style: italic;
+}
