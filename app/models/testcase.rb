@@ -1,5 +1,11 @@
 class Testcase < ActiveRecord::Base
+  include Redmine::Acts::Attachable
+
   belongs_to :issue
+
+  # Attachments support
+  acts_as_attachable view_permission: :view_test_cases,
+                     delete_permission: :manage_test_cases
 
   # Status enumeration - defined first so validations can use it
   def self.status_values
@@ -42,6 +48,11 @@ class Testcase < ActiveRecord::Base
 
   def status_label
     I18n.t("testcase_status_#{status}")
+  end
+
+  # Required by acts_as_attachable for permission checks
+  def project
+    issue&.project
   end
 
   # Status color coding for UI

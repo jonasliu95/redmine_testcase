@@ -33,9 +33,17 @@ class TestcasesController < ApplicationController
   end
 
   def create
-    @testcase = @issue.testcases.build(testcase_params)
+    @testcase = @issue.testcases.build
+    
+    # Safe attributes mapping for plugins usually involves direct assignment in Redmine 
+    # but we'll manually handle attachments to ensure they bind correctly before save.
+    @testcase.safe_attributes = testcase_params if @testcase.respond_to?(:safe_attributes=)
+    @testcase.attributes = testcase_params unless @testcase.respond_to?(:safe_attributes=)
+    
+    @testcase.save_attachments(params[:attachments] || (params[:testcase] && params[:testcase][:uploads]))
 
     if @testcase.save
+      render_attachment_warning_if_needed(@testcase)
       flash[:notice] = l(:notice_test_case_created)
       redirect_to issue_path(@issue, tab: 'testcases')
     else
@@ -47,7 +55,13 @@ class TestcasesController < ApplicationController
   end
 
   def update
-    if @testcase.update(testcase_params)
+    @testcase.safe_attributes = testcase_params if @testcase.respond_to?(:safe_attributes=)
+    @testcase.attributes = testcase_params unless @testcase.respond_to?(:safe_attributes=)
+    
+    @testcase.save_attachments(params[:attachments] || (params[:testcase] && params[:testcase][:uploads]))
+
+    if @testcase.save
+      render_attachment_warning_if_needed(@testcase)
       flash[:notice] = l(:notice_test_case_updated)
       redirect_to issue_path(@issue, tab: 'testcases')
     else

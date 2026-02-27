@@ -56,5 +56,10 @@
         <%= format_testcase_field(testcase.comments) %>
       </div>
     <% end %>
+
+    <% if testcase.attachments.any? %>
+      <hr />
+      <%= link_to_attachments testcase, thumbnails: true %>
+    <% end %>
   </div>
 </div>

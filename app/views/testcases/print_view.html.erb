@@ -108,6 +108,19 @@
       </div>
     <% end %>
 
+    <% if testcase.attachments.any? %>
+      <div style="margin: 10px 0;">
+        <strong><%= l(:label_attachment_plural) %>:</strong>
+        <div style="margin-left: 20px; margin-top: 5px;">
+          <ul style="list-style-type: disc; margin-left: 20px;">
+            <% testcase.attachments.each do |attachment| %>
+              <li><%= attachment.filename %> (<%= number_to_human_size(attachment.filesize) %>)</li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+
     <div style="margin-top: 10px; font-size: 11px; color: #999;">
       <%= l(:label_last_updated) %>: <%= format_time(testcase.updated_at) %>
     </div>
