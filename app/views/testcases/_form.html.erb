@@ -1,0 +1,59 @@
+<%= form_for @testcase,
+             url: @testcase.new_record? ? issue_testcases_path(@issue) : issue_testcase_path(@issue, @testcase),
+             html: { class: 'tabular' } do |f| %>
+  <%= error_messages_for 'testcase' %>
+
+  <div class="box tabular">
+    <p>
+      <%= f.label :test_case_id, l(:label_test_case_id) %>
+      <%= f.text_field :test_case_id, required: true, size: 50, maxlength: 50, placeholder: 'TC_UI_001' %>
+      <em class="info"><%= l(:text_length_between, min: 1, max: 50) rescue 'Max 50 characters' %></em>
+    </p>
+
+    <p>
+      <%= f.label :title, l(:label_test_case_title) %>
+      <%= f.text_field :title, required: true, size: 100, maxlength: 255 %>
+      <em class="info"><%= l(:text_length_between, min: 1, max: 255) rescue 'Max 255 characters' %></em>
+    </p>
+
+    <p>
+      <%= f.label :status, l(:label_test_case_status) %>
+      <%= f.select :status, Testcase.status_options, {}, required: true %>
+    </p>
+
+    <p>
+      <%= f.label :preconditions, l(:label_test_case_preconditions) %>
+      <%= f.text_area :preconditions, rows: 5, class: 'wiki-edit', maxlength: 10000 %>
+      <em class="info"><%= l(:text_length_between, min: 0, max: 10000) rescue 'Max 10,000 characters' %></em>
+    </p>
+
+    <p>
+      <%= f.label :steps, l(:label_test_case_steps) %>
+      <%= f.text_area :steps, rows: 8, class: 'wiki-edit', maxlength: 10000 %>
+      <em class="info"><%= l(:text_length_between, min: 0, max: 10000) rescue 'Max 10,000 characters' %></em>
+    </p>
+
+    <p>
+      <%= f.label :expected_result, l(:label_test_case_expected) %>
+      <%= f.text_area :expected_result, rows: 5, class: 'wiki-edit', maxlength: 10000 %>
+      <em class="info"><%= l(:text_length_between, min: 0, max: 10000) rescue 'Max 10,000 characters' %></em>
+    </p>
+
+    <p>
+      <%= f.label :actual_result, l(:label_test_case_actual) %>
+      <%= f.text_area :actual_result, rows: 5, class: 'wiki-edit', maxlength: 10000 %>
+      <em class="info"><%= l(:text_length_between, min: 0, max: 10000) rescue 'Max 10,000 characters' %></em>
+    </p>
+
+    <p>
+      <%= f.label :comments, l(:label_test_case_comments) %>
+      <%= f.text_area :comments, rows: 4, class: 'wiki-edit', maxlength: 10000 %>
+      <em class="info"><%= l(:text_length_between, min: 0, max: 10000) rescue 'Max 10,000 characters' %></em>
+    </p>
+  </div>
+
+  <p class="buttons">
+    <%= submit_tag l(:button_save) %>
+    <%= link_to l(:button_cancel), issue_path(@issue, tab: 'testcases'), class: 'button' %>
+  </p>
+<% end %>

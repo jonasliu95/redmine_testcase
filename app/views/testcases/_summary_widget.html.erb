@@ -1,0 +1,24 @@
+<div class="testcase-summary box">
+  <h4><%= l(:label_test_cases_summary) %></h4>
+
+  <table class="list summary-table">
+    <thead>
+      <tr>
+        <th><%= l(:label_total_test_cases) %></th>
+        <% Testcase.status_values.each do |status| %>
+          <th><%= l("testcase_status_#{status}") %></th>
+        <% end %>
+        <th><%= l(:label_percentage_passed) %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="total"><strong><%= summary[:total] %></strong></td>
+        <% Testcase.status_values.each do |status| %>
+          <td class="<%= status %>"><%= summary[:by_status][status] || 0 %></td>
+        <% end %>
+        <td class="pass-rate"><strong><%= summary[:pass_rate] %>%</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

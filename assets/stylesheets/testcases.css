@@ -97,6 +97,27 @@
   gap: 5px;
 }
 
+.testcase-actions .testcase-action-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border: 1px solid #c0d3e2;
+  border-radius: 3px;
+  background-color: #f0f6fb;
+  color: #15537d;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.testcase-actions .testcase-action-button:hover {
+  background-color: #dcecf7;
+  border-color: #9abbd4;
+  color: #0f3c5a;
+}
+
 .testcase-actions a {
   font-size: 12px;
   padding: 2px 5px;
@@ -220,9 +241,24 @@
   gap: 5px;
 }
 
-.testcase-controls .button-group a {
+.testcase-controls .button-group .testcase-control-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 12px;
-  padding: 5px 10px;
+  padding: 6px 12px;
+  border-radius: 3px;
+  border: 1px solid #1273a5;
+  background-color: #167ab5;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.testcase-controls .button-group .testcase-control-button:hover {
+  background-color: #0f5d86;
+  border-color: #0b496a;
 }
 
 /* Print View Styles */
@@ -250,3 +286,5 @@ p.nodata {
   color: #999;
   font-style: italic;
 }
+
+/* Form attachments */

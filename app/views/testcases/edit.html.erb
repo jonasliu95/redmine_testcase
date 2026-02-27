@@ -1,0 +1,8 @@
+<h2><%= l(:label_edit_test_case) %></h2>
+
+<div class="box">
+  <p><strong><%= l(:field_issue) %>:</strong> #<%= @issue.id %> - <%= @issue.subject %></p>
+  <p><strong><%= l(:label_test_case_id) %>:</strong> <%= @testcase.test_case_id %></p>
+</div>
+
+<%= render 'form' %>

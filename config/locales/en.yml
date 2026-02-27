@@ -1,0 +1,71 @@
+en:
+  # Plugin name and description
+  project_module_testcase: "Test Cases"
+
+  # Permissions
+  permission_view_test_cases: "View test cases"
+  permission_manage_test_cases: "Manage test cases"
+
+  # Settings
+  label_testcase_tracker: "Test Case Tracker"
+  label_testcase_settings: "Test Case Settings"
+  text_select_testcase_tracker: "Select the tracker that will enable test case management"
+  text_no_tracker_selected: "No tracker selected - test case functionality is disabled"
+
+  # Test Cases tab and general labels
+  label_test_cases: "Test Cases"
+  label_test_case: "Test Case"
+  label_add_test_case: "Add Test Case"
+  label_edit_test_case: "Edit Test Case"
+  label_delete_test_case: "Delete Test Case"
+  label_test_case_id: "Test Case ID"
+  label_test_case_title: "Title"
+  label_test_case_preconditions: "Preconditions"
+  label_test_case_steps: "Test Steps"
+  label_test_case_expected: "Expected Result"
+  label_test_case_actual: "Actual Result"
+  label_test_case_status: "Status"
+  label_test_case_comments: "Comments"
+  label_last_updated: "Last Updated"
+
+  # Actions
+  button_add_test_case: "Add Test Case"
+  button_export_csv: "Export to CSV"
+  button_print_view: "Print View"
+  button_collapse_all: "Collapse All"
+  button_expand_all: "Expand All"
+
+  # Status values
+  testcase_status_not_executed: "Not Executed / Not Run"
+  testcase_status_in_progress: "In Progress"
+  testcase_status_passed: "Passed"
+  testcase_status_failed: "Failed"
+  testcase_status_blocked: "Blocked"
+  testcase_status_skipped: "Skipped / Deferred"
+  testcase_status_retest: "Retest"
+  testcase_status_reopened: "Reopened"
+  testcase_status_closed: "Closed / Completed"
+
+  # Messages
+  notice_test_case_created: "Test case was successfully created."
+  notice_test_case_updated: "Test case was successfully updated."
+  notice_test_case_deleted: "Test case was successfully deleted."
+  error_test_case_not_found: "Test case not found."
+  error_duplicate_test_case_id: "Test Case ID already exists for this issue."
+
+  # Summary and reports
+  label_test_cases_summary: "Test Cases Summary"
+  label_total_test_cases: "Total Test Cases"
+  label_percentage_passed: "Pass Rate"
+  label_test_case_report: "Test Case Report"
+  label_export_filename: "test_cases_issue_%{issue_id}.csv"
+
+  # Filters
+  label_filter_by_status: "Filter by Status"
+  label_search_test_cases: "Search Test Cases"
+  label_all_statuses: "All Statuses"
+
+  # Validation
+  error_test_case_id_required: "Test Case ID is required"
+  error_title_required: "Title is required"
+  error_status_required: "Status is required"

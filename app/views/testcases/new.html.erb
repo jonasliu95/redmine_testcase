@@ -1,0 +1,8 @@
+<h2><%= l(:label_add_test_case) %></h2>
+
+<div class="box">
+  <p><strong><%= l(:field_issue) %>:</strong> #<%= @issue.id %> - <%= @issue.subject %></p>
+  <p><strong><%= l(:field_tracker) %>:</strong> <%= @issue.tracker.name %></p>
+</div>
+
+<%= render 'form' %>

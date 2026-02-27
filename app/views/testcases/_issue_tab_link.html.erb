@@ -1,0 +1,25 @@
+<%
+  # Only show tab if tracker is configured for test cases
+  testcase_tracker_id = Setting.plugin_redmine_testcase['testcase_tracker_id']
+  return if testcase_tracker_id.blank?
+  return unless issue.tracker_id.to_s == testcase_tracker_id.to_s
+  return unless User.current.allowed_to_globally?(:view_test_cases)
+
+  # Count test cases for this issue
+  testcase_count = issue.testcases.count
+%>
+
+<% content_for :header_tags do %>
+  <style>
+    #tab-testcases { display: none; }
+  </style>
+<% end %>
+
+<div id="tab-content-testcases" class="tab-content" style="display:none;">
+  <%= render partial: 'testcases/issue_test_cases', locals: { issue: issue } %>
+</div>
+
+<%= link_to_function l(:label_test_cases) + " (#{testcase_count})",
+                     "showTab('testcases'); this.blur(); return false;",
+                     id: 'tab-testcases',
+                     class: 'icon icon-list' %>

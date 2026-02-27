@@ -1,0 +1,18 @@
+<div class="box tabular settings">
+  <h3><%= l(:label_testcase_settings) %></h3>
+
+  <p>
+    <label for="settings_testcase_tracker_id"><%= l(:label_testcase_tracker) %></label>
+    <%= select_tag 'settings[testcase_tracker_id]',
+                   options_for_select(
+                     [[l(:text_no_tracker_selected), '']] +
+                     Tracker.all.map { |t| [t.name, t.id] },
+                     @settings['testcase_tracker_id']
+                   ),
+                   class: 'select2' %>
+  </p>
+
+  <p class="form-hint">
+    <%= l(:text_select_testcase_tracker) %>
+  </p>
+</div>

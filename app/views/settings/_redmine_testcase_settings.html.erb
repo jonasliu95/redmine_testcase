@@ -1,0 +1,6 @@
+<p>
+  <label><%= l(:label_testcase_tracker) %></label>
+  <%= select_tag 'settings[testcase_tracker_id]',
+                 options_for_select(Tracker.sorted.pluck(:name, :id), @settings['testcase_tracker_id']),
+                 include_blank: true %>
+</p>

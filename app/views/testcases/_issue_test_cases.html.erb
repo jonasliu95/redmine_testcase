@@ -1,0 +1,66 @@
+<%
+  testcases = issue.testcases.order(:position)
+  summary = {
+    total: testcases.count,
+    by_status: {}
+  }
+
+  Testcase.status_values.each do |status|
+    summary[:by_status][status] = testcases.where(status: status).count
+  end
+
+  passed_count = summary[:by_status]['passed'] || 0
+  summary[:pass_rate] = summary[:total] > 0 ? (passed_count.to_f / summary[:total] * 100).round(1) : 0
+%>
+
+<div class="contextual">
+  <% if User.current.allowed_to_globally?(:manage_test_cases) %>
+    <%= link_to l(:button_add_test_case),
+                new_issue_testcase_path(issue),
+                class: 'icon icon-add' %>
+    <%= link_to l(:button_export_csv),
+                export_csv_issue_testcases_path(issue),
+                class: 'icon icon-download' %>
+    <%= link_to l(:button_print_view),
+                print_view_issue_testcases_path(issue),
+                class: 'icon icon-file',
+                target: '_blank' %>
+  <% end %>
+</div>
+
+<h3><%= l(:label_test_cases) %></h3>
+
+<%= render partial: 'testcases/summary_widget', locals: { summary: summary } %>
+
+<% if testcases.any? %>
+  <div class="testcase-controls">
+    <div class="control-group">
+      <label for="testcase-status-filter"><%= l(:label_filter_by_status) %>:</label>
+      <select id="testcase-status-filter">
+        <option value="all"><%= l(:label_all_statuses) %></option>
+        <% Testcase.status_values.each do |status| %>
+          <option value="<%= status %>"><%= l("testcase_status_#{status}") %></option>
+        <% end %>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label for="testcase-search"><%= l(:label_search_test_cases) %>:</label>
+      <input type="text" id="testcase-search" placeholder="<%= l(:label_test_case_id) %> or <%= l(:label_test_case_title) %>">
+    </div>
+
+    <div class="button-group">
+      <%= link_to l(:button_collapse_all), '#', id: 'collapse-all-btn', class: 'testcase-control-button icon icon-collapsed' %>
+      <%= link_to l(:button_expand_all), '#', id: 'expand-all-btn', class: 'testcase-control-button icon icon-expended' %>
+    </div>
+  </div>
+
+  <div class="test-cases-list">
+    <%= render partial: 'testcases/testcase_item', collection: testcases, as: :testcase %>
+  </div>
+<% else %>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+<% end %>
+
+<%= javascript_include_tag 'testcases', plugin: 'redmine_testcase' %>
+<%= stylesheet_link_tag 'testcases', plugin: 'redmine_testcase' %>

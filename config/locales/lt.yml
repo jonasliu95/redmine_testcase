@@ -1,0 +1,71 @@
+lt:
+  # Plugin name and description
+  project_module_testcase: "Testų atvejai"
+
+  # Permissions
+  permission_view_test_cases: "Peržiūrėti testų atvejus"
+  permission_manage_test_cases: "Valdyti testų atvejus"
+
+  # Settings
+  label_testcase_tracker: "Testų atvejų sekiklis"
+  label_testcase_settings: "Testų atvejų nustatymai"
+  text_select_testcase_tracker: "Pasirinkite sekiklį, kuris įgalins testų atvejų valdymą"
+  text_no_tracker_selected: "Nepasirinktas sekiklis - testų atvejų funkcionalumas išjungtas"
+
+  # Test Cases tab and general labels
+  label_test_cases: "Testų atvejai"
+  label_test_case: "Testo atvejis"
+  label_add_test_case: "Pridėti testo atvejį"
+  label_edit_test_case: "Redaguoti testo atvejį"
+  label_delete_test_case: "Ištrinti testo atvejį"
+  label_test_case_id: "Testo atvejo ID"
+  label_test_case_title: "Pavadinimas"
+  label_test_case_preconditions: "Išankstinės sąlygos"
+  label_test_case_steps: "Testo žingsniai"
+  label_test_case_expected: "Laukiamas rezultatas"
+  label_test_case_actual: "Faktinis rezultatas"
+  label_test_case_status: "Būsena"
+  label_test_case_comments: "Komentarai"
+  label_last_updated: "Paskutinį kartą atnaujinta"
+
+  # Actions
+  button_add_test_case: "Pridėti testo atvejį"
+  button_export_csv: "Eksportuoti į CSV"
+  button_print_view: "Spausdinimo vaizdas"
+  button_collapse_all: "Suskleisti viską"
+  button_expand_all: "Išskleisti viską"
+
+  # Status values
+  testcase_status_not_executed: "Neįvykdyta / Nepaleista"
+  testcase_status_in_progress: "Vykdoma"
+  testcase_status_passed: "Sėkminga"
+  testcase_status_failed: "Nesėkminga"
+  testcase_status_blocked: "Užblokuota"
+  testcase_status_skipped: "Praleista / Atidėta"
+  testcase_status_retest: "Pakartotinis testas"
+  testcase_status_reopened: "Atidaryta iš naujo"
+  testcase_status_closed: "Uždaryta / Baigta"
+
+  # Messages
+  notice_test_case_created: "Testo atvejis sėkmingai sukurtas."
+  notice_test_case_updated: "Testo atvejis sėkmingai atnaujintas."
+  notice_test_case_deleted: "Testo atvejis sėkmingai ištrintas."
+  error_test_case_not_found: "Testo atvejis nerastas."
+  error_duplicate_test_case_id: "Šis testo atvejo ID jau egzistuoja šiam klausimui."
+
+  # Summary and reports
+  label_test_cases_summary: "Testų atvejų santrauka"
+  label_total_test_cases: "Viso testų atvejų"
+  label_percentage_passed: "Sėkmingumo rodiklis"
+  label_test_case_report: "Testų atvejų ataskaita"
+  label_export_filename: "testu_atvejai_klausimas_%{issue_id}.csv"
+
+  # Filters
+  label_filter_by_status: "Filtruoti pagal būseną"
+  label_search_test_cases: "Ieškoti testų atvejų"
+  label_all_statuses: "Visos būsenos"
+
+  # Validation
+  error_test_case_id_required: "Testo atvejo ID privalomas"
+  error_title_required: "Pavadinimas privalomas"
+  error_status_required: "Būsena privaloma"

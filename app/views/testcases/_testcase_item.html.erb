@@ -1,0 +1,60 @@
+<div class="testcase-item" data-testcase-id="<%= testcase.id %>">
+  <div class="testcase-header">
+    <span class="testcase-id"><strong><%= testcase.test_case_id %></strong></span>
+    <span class="testcase-title"><%= testcase.title %></span>
+    <%= testcase_status_badge(testcase) %>
+    <span class="testcase-updated"><%= l(:label_last_updated) %>: <%= format_time(testcase.updated_at) %></span>
+
+    <div class="testcase-actions">
+      <% if User.current.allowed_to_globally?(:manage_test_cases) %>
+        <%= link_to l(:button_edit),
+                    edit_issue_testcase_path(testcase.issue, testcase),
+                    class: 'testcase-action-button',
+                    title: l(:button_edit) %>
+        <%= link_to l(:button_delete),
+                    issue_testcase_path(testcase.issue, testcase),
+                    method: :delete,
+                    data: { confirm: l(:text_are_you_sure) },
+                    class: 'testcase-action-button',
+                    title: l(:button_delete) %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="testcase-body">
+    <% if testcase.preconditions.present? %>
+      <div class="testcase-field">
+        <strong><%= l(:label_test_case_preconditions) %>:</strong>
+        <%= format_testcase_field(testcase.preconditions) %>
+      </div>
+    <% end %>
+
+    <% if testcase.steps.present? %>
+      <div class="testcase-field">
+        <strong><%= l(:label_test_case_steps) %>:</strong>
+        <%= format_testcase_field(testcase.steps) %>
+      </div>
+    <% end %>
+
+    <% if testcase.expected_result.present? %>
+      <div class="testcase-field">
+        <strong><%= l(:label_test_case_expected) %>:</strong>
+        <%= format_testcase_field(testcase.expected_result) %>
+      </div>
+    <% end %>
+
+    <% if testcase.actual_result.present? %>
+      <div class="testcase-field">
+        <strong><%= l(:label_test_case_actual) %>:</strong>
+        <%= format_testcase_field(testcase.actual_result) %>
+      </div>
+    <% end %>
+
+    <% if testcase.comments.present? %>
+      <div class="testcase-field">
+        <strong><%= l(:label_test_case_comments) %>:</strong>
+        <%= format_testcase_field(testcase.comments) %>
+      </div>
+    <% end %>
+  </div>
+</div>

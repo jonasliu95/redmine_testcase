@@ -7,14 +7,21 @@ function initTestCases() {
   const testcaseHeaders = document.querySelectorAll('.testcase-header');
 
   testcaseHeaders.forEach(function(header) {
+    if (header.dataset.testcaseBound === 'true') {
+      return;
+    }
+
     // Make header clickable
     header.style.cursor = 'pointer';
 
-    // Add collapse/expand icon
-    const toggleIcon = document.createElement('span');
-    toggleIcon.className = 'toggle-icon';
-    toggleIcon.innerHTML = '&#9660;'; // Down arrow
-    header.insertBefore(toggleIcon, header.firstChild);
+    // Add collapse/expand icon when not already present
+    let toggleIcon = header.querySelector('.toggle-icon');
+    if (!toggleIcon) {
+      toggleIcon = document.createElement('span');
+      toggleIcon.className = 'toggle-icon';
+      toggleIcon.innerHTML = '&#9660;'; // Down arrow
+      header.insertBefore(toggleIcon, header.firstChild);
+    }
 
     // Add click event
     header.addEventListener('click', function(e) {
@@ -37,6 +44,8 @@ function initTestCases() {
         testcaseItem.classList.add('collapsed');
       }
     });
+
+    header.dataset.testcaseBound = 'true';
   });
 
   // Collapse/Expand all buttons
