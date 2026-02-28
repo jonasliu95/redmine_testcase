@@ -106,6 +106,7 @@ Tested successfully on Redmine 6.1.X and 6.0.X.
 ```bash
 cd /path/to/redmine
 bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+bundle exec rake assets:precompile
 touch tmp/restart.txt
 ```
 
