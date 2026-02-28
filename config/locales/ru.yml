@@ -1,0 +1,74 @@
+ru:
+  # Plugin name and description
+  project_module_testcase: "Тест-кейсы"
+
+  # Permissions
+  permission_view_test_cases: "Просмотр тест-кейсов"
+  permission_manage_test_cases: "Управление тест-кейсами"
+
+  # Settings
+  label_testcase_tracker: "Трекер тест-кейсов"
+  label_testcase_settings: "Настройки тест-кейсов"
+  text_select_testcase_tracker: "Выберите трекер, который включит управление тест-кейсами"
+  text_no_tracker_selected: "Трекер не выбран - функциональность тест-кейсов отключена"
+
+  # Test Cases tab and general labels
+  label_test_cases: "Тест-кейсы"
+  label_test_case: "Тест-кейс"
+  label_add_test_case: "Добавить тест-кейс"
+  label_edit_test_case: "Редактировать тест-кейс"
+  label_delete_test_case: "Удалить тест-кейс"
+  label_test_case_id: "ID тест-кейса"
+  label_test_case_title: "Заголовок"
+  label_test_case_preconditions: "Предварительные условия"
+  label_test_case_steps: "Шаги теста"
+  label_test_case_expected: "Ожидаемый результат"
+  label_test_case_actual: "Фактический результат"
+  label_test_case_status: "Статус"
+  label_test_case_comments: "Комментарии"
+  label_last_updated: "Последнее обновление"
+
+  # Actions
+  button_add_test_case: "Добавить тест-кейс"
+  button_export_csv: "Экспорт в CSV"
+  button_print_view: "Версия для печати"
+  button_collapse_all: "Свернуть все"
+  button_expand_all: "Развернуть все"
+
+  # Status values
+  testcase_status_not_executed: "Не выполнено"
+  testcase_status_in_progress: "В процессе"
+  testcase_status_passed: "Успешно"
+  testcase_status_failed: "Провалено"
+  testcase_status_blocked: "Заблокировано"
+  testcase_status_skipped: "Пропущено / Отложено"
+  testcase_status_retest: "Перепроверить"
+  testcase_status_reopened: "Переоткрыто"
+  testcase_status_closed: "Закрыто / Завершено"
+
+  # Messages
+  notice_test_case_created: "Тест-кейс успешно создан."
+  notice_test_case_updated: "Тест-кейс успешно обновлен."
+  notice_test_case_deleted: "Тест-кейс успешно удален."
+  error_test_case_not_found: "Тест-кейс не найден."
+  error_duplicate_test_case_id: "ID тест-кейса уже существует для этой задачи."
+
+  # Summary and reports
+  label_test_cases_summary: "Сводка по тест-кейсам"
+  label_total_test_cases: "Всего тест-кейсов"
+  label_percentage_passed: "Процент успешных"
+  label_test_case_report: "Отчет по тест-кейсам"
+  label_export_filename: "тест_кейсы_задача_%{issue_id}.csv"
+
+  # Filters
+  label_filter_by_status: "Фильтр по статусу"
+  label_search_test_cases: "Поиск тест-кейсов"
+  label_all_statuses: "Все статусы"
+
+  # Validation
+  error_test_case_id_required: "ID тест-кейса обязателен"
+  error_title_required: "Заголовок обязателен"
+  error_status_required: "Статус обязателен"
+
+  # Other
+  text_generated_by: "Сгенерировано плагином Redmine testcase от Jonas Liubinas"

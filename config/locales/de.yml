@@ -1,0 +1,74 @@
+de:
+  # Plugin name and description
+  project_module_testcase: "Testfälle"
+
+  # Permissions
+  permission_view_test_cases: "Testfälle anzeigen"
+  permission_manage_test_cases: "Testfälle verwalten"
+
+  # Settings
+  label_testcase_tracker: "Testfall-Tracker"
+  label_testcase_settings: "Testfall-Einstellungen"
+  text_select_testcase_tracker: "Wählen Sie den Tracker, der die Testfallverwaltung aktivieren soll"
+  text_no_tracker_selected: "Kein Tracker ausgewählt - Testfall-Funktionalität ist deaktiviert"
+
+  # Test Cases tab and general labels
+  label_test_cases: "Testfälle"
+  label_test_case: "Testfall"
+  label_add_test_case: "Testfall hinzufügen"
+  label_edit_test_case: "Testfall bearbeiten"
+  label_delete_test_case: "Testfall löschen"
+  label_test_case_id: "Testfall-ID"
+  label_test_case_title: "Titel"
+  label_test_case_preconditions: "Voraussetzungen"
+  label_test_case_steps: "Testschritte"
+  label_test_case_expected: "Erwartetes Ergebnis"
+  label_test_case_actual: "Tatsächliches Ergebnis"
+  label_test_case_status: "Status"
+  label_test_case_comments: "Kommentare"
+  label_last_updated: "Zuletzt aktualisiert"
+
+  # Actions
+  button_add_test_case: "Testfall hinzufügen"
+  button_export_csv: "Als CSV exportieren"
+  button_print_view: "Druckansicht"
+  button_collapse_all: "Alle einklappen"
+  button_expand_all: "Alle ausklappen"
+
+  # Status values
+  testcase_status_not_executed: "Nicht ausgeführt / Nicht gestartet"
+  testcase_status_in_progress: "In Bearbeitung"
+  testcase_status_passed: "Bestanden"
+  testcase_status_failed: "Fehlgeschlagen"
+  testcase_status_blocked: "Blockiert"
+  testcase_status_skipped: "Übersprungen / Zurückgestellt"
+  testcase_status_retest: "Erneut testen"
+  testcase_status_reopened: "Wiedereröffnet"
+  testcase_status_closed: "Geschlossen / Abgeschlossen"
+
+  # Messages
+  notice_test_case_created: "Testfall wurde erfolgreich erstellt."
+  notice_test_case_updated: "Testfall wurde erfolgreich aktualisiert."
+  notice_test_case_deleted: "Testfall wurde erfolgreich gelöscht."
+  error_test_case_not_found: "Testfall nicht gefunden."
+  error_duplicate_test_case_id: "Testfall-ID existiert für dieses Ticket bereits."
+
+  # Summary and reports
+  label_test_cases_summary: "Testfälle Zusammenfassung"
+  label_total_test_cases: "Gesamte Testfälle"
+  label_percentage_passed: "Bestehensquote"
+  label_test_case_report: "Testfall-Bericht"
+  label_export_filename: "testfaelle_ticket_%{issue_id}.csv"
+
+  # Filters
+  label_filter_by_status: "Nach Status filtern"
+  label_search_test_cases: "Testfälle suchen"
+  label_all_statuses: "Alle Status"
+
+  # Validation
+  error_test_case_id_required: "Testfall-ID ist erforderlich"
+  error_title_required: "Titel ist erforderlich"
+  error_status_required: "Status ist erforderlich"
+
+  # Other
+  text_generated_by: "Erstellt durch das Redmine testcase Plugin von Jonas Liubinas"

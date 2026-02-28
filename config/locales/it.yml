@@ -1,0 +1,74 @@
+it:
+  # Plugin name and description
+  project_module_testcase: "Casi di test"
+
+  # Permissions
+  permission_view_test_cases: "Visualizza casi di test"
+  permission_manage_test_cases: "Gestisci casi di test"
+
+  # Settings
+  label_testcase_tracker: "Tracker dei casi di test"
+  label_testcase_settings: "Impostazioni dei casi di test"
+  text_select_testcase_tracker: "Seleziona il tracker che abiliterà la gestione dei casi di test"
+  text_no_tracker_selected: "Nessun tracker selezionato - la funzionalità dei casi di test è disabilitata"
+
+  # Test Cases tab and general labels
+  label_test_cases: "Casi di test"
+  label_test_case: "Caso di test"
+  label_add_test_case: "Aggiungi caso di test"
+  label_edit_test_case: "Modifica caso di test"
+  label_delete_test_case: "Elimina caso di test"
+  label_test_case_id: "ID caso di test"
+  label_test_case_title: "Titolo"
+  label_test_case_preconditions: "Precondizioni"
+  label_test_case_steps: "Passaggi del test"
+  label_test_case_expected: "Risultato atteso"
+  label_test_case_actual: "Risultato effettivo"
+  label_test_case_status: "Stato"
+  label_test_case_comments: "Commenti"
+  label_last_updated: "Ultimo aggiornamento"
+
+  # Actions
+  button_add_test_case: "Aggiungi caso di test"
+  button_export_csv: "Esporta in CSV"
+  button_print_view: "Versione per la stampa"
+  button_collapse_all: "Comprimi tutto"
+  button_expand_all: "Espandi tutto"
+
+  # Status values
+  testcase_status_not_executed: "Non eseguito"
+  testcase_status_in_progress: "In corso"
+  testcase_status_passed: "Superato"
+  testcase_status_failed: "Fallito"
+  testcase_status_blocked: "Bloccato"
+  testcase_status_skipped: "Ignorato / Rimandato"
+  testcase_status_retest: "Da ritestare"
+  testcase_status_reopened: "Riaperto"
+  testcase_status_closed: "Chiuso / Completato"
+
+  # Messages
+  notice_test_case_created: "Caso di test creato con successo."
+  notice_test_case_updated: "Caso di test aggiornato con successo."
+  notice_test_case_deleted: "Caso di test eliminato con successo."
+  error_test_case_not_found: "Caso di test non trovato."
+  error_duplicate_test_case_id: "L'ID del caso di test esiste già per questa segnalazione."
+
+  # Summary and reports
+  label_test_cases_summary: "Riepilogo dei casi di test"
+  label_total_test_cases: "Totale casi di test"
+  label_percentage_passed: "Tasso di successo"
+  label_test_case_report: "Report dei casi di test"
+  label_export_filename: "casi_di_test_segnalazione_%{issue_id}.csv"
+
+  # Filters
+  label_filter_by_status: "Filtra per stato"
+  label_search_test_cases: "Cerca casi di test"
+  label_all_statuses: "Tutti gli stati"
+
+  # Validation
+  error_test_case_id_required: "L'ID del caso di test è obbligatorio"
+  error_title_required: "Il titolo è obbligatorio"
+  error_status_required: "Lo stato è obbligatorio"
+
+  # Other
+  text_generated_by: "Generato dal plugin Redmine testcase di Jonas Liubinas"

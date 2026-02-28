@@ -1,0 +1,74 @@
+ja:
+  # Plugin name and description
+  project_module_testcase: "テストケース"
+
+  # Permissions
+  permission_view_test_cases: "テストケースの表示"
+  permission_manage_test_cases: "テストケースの管理"
+
+  # Settings
+  label_testcase_tracker: "テストケーストラッカー"
+  label_testcase_settings: "テストケース設定"
+  text_select_testcase_tracker: "テストケース管理を有効にするトラッカーを選択してください"
+  text_no_tracker_selected: "トラッカーが選択されていません - テストケース機能は無効です"
+
+  # Test Cases tab and general labels
+  label_test_cases: "テストケース"
+  label_test_case: "テストケース"
+  label_add_test_case: "テストケースの追加"
+  label_edit_test_case: "テストケースの編集"
+  label_delete_test_case: "テストケースの削除"
+  label_test_case_id: "テストケースID"
+  label_test_case_title: "タイトル"
+  label_test_case_preconditions: "前提条件"
+  label_test_case_steps: "テスト手順"
+  label_test_case_expected: "期待される結果"
+  label_test_case_actual: "実際の結果"
+  label_test_case_status: "ステータス"
+  label_test_case_comments: "コメント"
+  label_last_updated: "最終更新日"
+
+  # Actions
+  button_add_test_case: "テストケースの追加"
+  button_export_csv: "CSVにエクスポート"
+  button_print_view: "印刷ビュー"
+  button_collapse_all: "すべて折りたたむ"
+  button_expand_all: "すべて展開する"
+
+  # Status values
+  testcase_status_not_executed: "未実行"
+  testcase_status_in_progress: "進行中"
+  testcase_status_passed: "成功"
+  testcase_status_failed: "失敗"
+  testcase_status_blocked: "ブロック"
+  testcase_status_skipped: "スキップ / 保留"
+  testcase_status_retest: "再テスト"
+  testcase_status_reopened: "再オープン"
+  testcase_status_closed: "クローズ / 完了"
+
+  # Messages
+  notice_test_case_created: "テストケースが正常に作成されました。"
+  notice_test_case_updated: "テストケースが正常に更新されました。"
+  notice_test_case_deleted: "テストケースが正常に削除されました。"
+  error_test_case_not_found: "テストケースが見つかりません。"
+  error_duplicate_test_case_id: "このチケットにはテストケースIDが既に存在します。"
+
+  # Summary and reports
+  label_test_cases_summary: "テストケースの概要"
+  label_total_test_cases: "合計テストケース"
+  label_percentage_passed: "合格率"
+  label_test_case_report: "テストケースレポート"
+  label_export_filename: "テストケース_チケット_%{issue_id}.csv"
+
+  # Filters
+  label_filter_by_status: "ステータスでフィルタリング"
+  label_search_test_cases: "テストケースの検索"
+  label_all_statuses: "すべてのステータス"
+
+  # Validation
+  error_test_case_id_required: "テストケースIDは必須です"
+  error_title_required: "タイトルは必須です"
+  error_status_required: "ステータスは必須です"
+
+  # Other
+  text_generated_by: "Jonas Liubinas による Redmine testcase プラグインによって生成されました"

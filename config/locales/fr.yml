@@ -1,0 +1,74 @@
+fr:
+  # Plugin name and description
+  project_module_testcase: "Cas de test"
+
+  # Permissions
+  permission_view_test_cases: "Voir les cas de test"
+  permission_manage_test_cases: "Gérer les cas de test"
+
+  # Settings
+  label_testcase_tracker: "Tracker de cas de test"
+  label_testcase_settings: "Paramètres des cas de test"
+  text_select_testcase_tracker: "Sélectionnez le tracker qui activera la gestion des cas de test"
+  text_no_tracker_selected: "Aucun tracker sélectionné - la fonctionnalité des cas de test est désactivée"
+
+  # Test Cases tab and general labels
+  label_test_cases: "Cas de test"
+  label_test_case: "Cas de test"
+  label_add_test_case: "Ajouter un cas de test"
+  label_edit_test_case: "Modifier le cas de test"
+  label_delete_test_case: "Supprimer le cas de test"
+  label_test_case_id: "ID du cas de test"
+  label_test_case_title: "Titre"
+  label_test_case_preconditions: "Conditions préalables"
+  label_test_case_steps: "Étapes de test"
+  label_test_case_expected: "Résultat attendu"
+  label_test_case_actual: "Résultat réel"
+  label_test_case_status: "Statut"
+  label_test_case_comments: "Commentaires"
+  label_last_updated: "Dernière mise à jour"
+
+  # Actions
+  button_add_test_case: "Ajouter un cas de test"
+  button_export_csv: "Exporter en CSV"
+  button_print_view: "Version imprimable"
+  button_collapse_all: "Tout réduire"
+  button_expand_all: "Tout développer"
+
+  # Status values
+  testcase_status_not_executed: "Non exécuté"
+  testcase_status_in_progress: "En cours"
+  testcase_status_passed: "Réussi"
+  testcase_status_failed: "Échoué"
+  testcase_status_blocked: "Bloqué"
+  testcase_status_skipped: "Ignoré / Reporté"
+  testcase_status_retest: "À retester"
+  testcase_status_reopened: "Rouvert"
+  testcase_status_closed: "Fermé / Terminé"
+
+  # Messages
+  notice_test_case_created: "Cas de test créé avec succès."
+  notice_test_case_updated: "Cas de test mis à jour avec succès."
+  notice_test_case_deleted: "Cas de test supprimé avec succès."
+  error_test_case_not_found: "Cas de test introuvable."
+  error_duplicate_test_case_id: "L'ID du cas de test existe déjà pour cette demande."
+
+  # Summary and reports
+  label_test_cases_summary: "Résumé des cas de test"
+  label_total_test_cases: "Total des cas de test"
+  label_percentage_passed: "Taux de réussite"
+  label_test_case_report: "Rapport de cas de test"
+  label_export_filename: "cas_de_test_demande_%{issue_id}.csv"
+
+  # Filters
+  label_filter_by_status: "Filtrer par statut"
+  label_search_test_cases: "Rechercher des cas de test"
+  label_all_statuses: "Tous les statuts"
+
+  # Validation
+  error_test_case_id_required: "L'ID du cas de test est requis"
+  error_title_required: "Le titre est requis"
+  error_status_required: "Le statut est requis"
+
+  # Other
+  text_generated_by: "Généré par le plugin Redmine testcase de Jonas Liubinas"

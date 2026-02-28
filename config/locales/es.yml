@@ -1,0 +1,74 @@
+es:
+  # Plugin name and description
+  project_module_testcase: "Casos de prueba"
+
+  # Permissions
+  permission_view_test_cases: "Ver casos de prueba"
+  permission_manage_test_cases: "Gestionar casos de prueba"
+
+  # Settings
+  label_testcase_tracker: "Tipo de petición de caso de prueba"
+  label_testcase_settings: "Configuración de casos de prueba"
+  text_select_testcase_tracker: "Seleccione el tipo de petición que habilitará la gestión de casos de prueba"
+  text_no_tracker_selected: "Ningún tipo de petición seleccionado - funcionalidad de casos de prueba deshabilitada"
+
+  # Test Cases tab and general labels
+  label_test_cases: "Casos de prueba"
+  label_test_case: "Caso de prueba"
+  label_add_test_case: "Añadir caso de prueba"
+  label_edit_test_case: "Editar caso de prueba"
+  label_delete_test_case: "Eliminar caso de prueba"
+  label_test_case_id: "ID de caso de prueba"
+  label_test_case_title: "Título"
+  label_test_case_preconditions: "Condiciones previas"
+  label_test_case_steps: "Pasos de prueba"
+  label_test_case_expected: "Resultado esperado"
+  label_test_case_actual: "Resultado real"
+  label_test_case_status: "Estado"
+  label_test_case_comments: "Comentarios"
+  label_last_updated: "Última actualización"
+
+  # Actions
+  button_add_test_case: "Añadir caso de prueba"
+  button_export_csv: "Exportar a CSV"
+  button_print_view: "Vista de impresión"
+  button_collapse_all: "Contraer todo"
+  button_expand_all: "Expandir todo"
+
+  # Status values
+  testcase_status_not_executed: "No ejecutado"
+  testcase_status_in_progress: "En progreso"
+  testcase_status_passed: "Aprobado"
+  testcase_status_failed: "Fallido"
+  testcase_status_blocked: "Bloqueado"
+  testcase_status_skipped: "Omitido / Pospuesto"
+  testcase_status_retest: "Volver a probar"
+  testcase_status_reopened: "Reabierto"
+  testcase_status_closed: "Cerrado / Completado"
+
+  # Messages
+  notice_test_case_created: "Caso de prueba creado con éxito."
+  notice_test_case_updated: "Caso de prueba actualizado con éxito."
+  notice_test_case_deleted: "Caso de prueba eliminado con éxito."
+  error_test_case_not_found: "Caso de prueba no encontrado."
+  error_duplicate_test_case_id: "El ID del caso de prueba ya existe para esta petición."
+
+  # Summary and reports
+  label_test_cases_summary: "Resumen de casos de prueba"
+  label_total_test_cases: "Total de casos de prueba"
+  label_percentage_passed: "Tasa de aprobación"
+  label_test_case_report: "Informe de casos de prueba"
+  label_export_filename: "casos_de_prueba_peticion_%{issue_id}.csv"
+
+  # Filters
+  label_filter_by_status: "Filtrar por estado"
+  label_search_test_cases: "Buscar casos de prueba"
+  label_all_statuses: "Todos los estados"
+
+  # Validation
+  error_test_case_id_required: "El ID del caso de prueba es obligatorio"
+  error_title_required: "El título es obligatorio"
+  error_status_required: "El estado es obligatorio"
+
+  # Other
+  text_generated_by: "Generado por el plugin Redmine testcase de Jonas Liubinas"

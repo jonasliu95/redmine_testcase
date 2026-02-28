@@ -69,3 +69,6 @@ lt:
   error_test_case_id_required: "Testo atvejo ID privalomas"
   error_title_required: "Pavadinimas privalomas"
   error_status_required: "Būsena privaloma"
+
+  # Other
+  text_generated_by: "Sukurta Redmine testcase įskiepio, autorius Jonas Liubinas"
