@@ -1,5 +1,7 @@
 # Redmine TestCase Plugin
 
+![Logo](img/testcase.jpg)
+
 A Redmine plugin for managing manual test cases within issues.
 
 ## Features
@@ -9,7 +11,6 @@ A Redmine plugin for managing manual test cases within issues.
 - Collapsible test case UI with detailed fields
 - Export test cases to CSV
 - Print-friendly HTML view for PDF generation
-- Role-based permissions for viewing and managing test cases
 - Status workflow tracking
 
 ## Installation
@@ -24,6 +25,7 @@ A Redmine plugin for managing manual test cases within issues.
    ```bash
    cd /path/to/redmine
    bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+   bundle exec rake assets:precompile
    ```
 
 3. Restart your Redmine instance:
@@ -42,25 +44,21 @@ A Redmine plugin for managing manual test cases within issues.
 
 ## Configuration
 
+![Configuration Settings](img/config_settings.png)
+
 1. Navigate to **Administration → Plugins**
 2. Find "Redmine TestCase Plugin" and click **Configure**
 3. Select the tracker you want to enable for test case management (e.g., "TestCase")
 4. Save settings
 
-## Permissions
-
-The plugin adds two new permissions that can be assigned to roles:
-
-- **View test cases**: Allows users to view test cases (read-only)
-- **Manage test cases**: Allows users to add, edit, and delete test cases
-
-Configure these in **Administration → Roles and permissions**.
-
 ## Usage
+
+![TestCase Overview](img/testcase_overview.png)
 
 1. Create or open an issue with the configured tracker
 2. Click the **Test Cases** tab
 3. Use **Add Test Case** to create new test cases
+   ![Input Form](img/input.png)
 4. Each test case includes:
    - Test Case ID (e.g., TC_UI_001)
    - Title
@@ -70,8 +68,11 @@ Configure these in **Administration → Roles and permissions**.
    - Actual Result
    - Status
    - Comments
+   ![Expanded TestCase](img/expanded_testcase.png)
 5. Use **Export CSV** to download all test cases
+   ![Exported CSV](img/exported_csv.png)
 6. Use **Print View** to generate a printer-friendly report
+   ![HTML Friendly Print](img/html_friendly_print.png)
 
 ## Test Case Statuses
 
@@ -87,7 +88,18 @@ Configure these in **Administration → Roles and permissions**.
 
 ## Compatibility
 
-- Redmine 5.x
+Tested successfully on Redmine 6.1.X and 6.0.X.
+
+| Locale | Status |
+|--------|--------|
+| en     | Full support |
+| lt     | Full support |
+| de     | Not supported |
+| es     | Not supported |
+| fr     | Not supported |
+| it     | Not supported |
+| ja     | Not supported |
+| ru     | Not supported |
 
 ## Upgrade
 
@@ -109,6 +121,8 @@ touch tmp/restart.txt
 ## Support
 
 For issues and feature requests, please visit: [GitHub Issues](https://github.com/jonasliu95/redmine_testcase/issues)
+
+Improvements are widely accepted! If you have any suggestions, bug reports, or translation updates, please open an issue in GitHub.
 
 ## License
 
