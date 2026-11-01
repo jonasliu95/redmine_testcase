@@ -6,12 +6,21 @@ A Redmine plugin for managing manual test cases within issues.
 
 ## Features
 
-- Add and manage test cases within specific issue trackers
-- Configurable tracker selection for QA functionality
-- Collapsible test case UI with detailed fields
-- Export test cases to CSV
-- Print-friendly HTML view for PDF generation
-- Status workflow tracking
+- One or more test-case trackers per installation
+- Test cases attached to issues, with status workflow and summary
+- Structured steps (action, test data, expected/actual result, per-step status)
+- Inline images in every test case text field (paste, drag and drop, or wiki markup)
+- Drag-to-reorder and bulk status update for users who can manage test cases
+- Copy test cases when an issue is copied
+- Optional issue notes for test case changes
+- CSV export and print-friendly report
+- JSON REST API with API-key or basic authentication
+
+## Requirements
+
+- Redmine 6.1.x or 7.0.x
+- The `test_cases` project module enabled for every project that uses the plugin
+- A role permission (`View test cases` or `Manage test cases`) in that project
 
 ## Installation
 
@@ -21,14 +30,14 @@ A Redmine plugin for managing manual test cases within issues.
    cp -r /path/to/redmine_testcase .
    ```
 
-2. Run the plugin migrations:
+2. Run the plugin migrations and precompile assets:
    ```bash
    cd /path/to/redmine
-   bundle exec rake redmine:plugins:migrate RAILS_ENV=production
-   bundle exec rake assets:precompile
+   bundle exec rake redmine:plugins:migrate NAME=redmine_testcase RAILS_ENV=production
+   bundle exec rake assets:precompile RAILS_ENV=production
    ```
 
-3. Restart your Redmine instance:
+3. Restart Redmine:
    ```bash
    # For Passenger
    touch tmp/restart.txt
@@ -36,95 +45,94 @@ A Redmine plugin for managing manual test cases within issues.
    # For other servers, restart accordingly
    ```
 
-4. Log in to Redmine as an administrator
-
-5. Go to **Administration → Plugins** to verify the plugin is loaded
-
-6. Go to **Administration → Plugins → Redmine TestCase Plugin → Configure** to select the tracker that will enable test case management
+4. Log in as an administrator and verify the plugin under **Administration → Plugins**.
 
 ## Configuration
 
-![Configuration Settings](img/config_settings.png)
+### Test case trackers
 
-1. Navigate to **Administration → Plugins**
-2. Find "Redmine TestCase Plugin" and click **Configure**
-3. Select the tracker you want to enable for test case management (e.g., "TestCase")
-4. Save settings
+Go to **Administration → Plugins → Redmine TestCase Plugin → Configure** and
+check every tracker that should offer test cases. Leave all trackers unchecked
+to disable the feature.
+
+The plugin still reads the legacy single `testcase_tracker_id` setting when the
+new tracker list has never been saved, so existing installations keep working
+after the upgrade.
+
+### Project module and permissions
+
+For each project that should use test cases:
+
+1. Open **Project → Settings → Modules** and enable **Test cases**.
+2. Open **Administration → Roles and permissions** (or the project's members
+   page) and grant **View test cases** and/or **Manage test cases** to the
+   roles that need them.
+
+Permissions are project-scoped. A user who only has the permission in another
+project cannot read or change test cases in this project.
 
 ## Usage
 
-![TestCase Overview](img/testcase_overview.png)
+1. Open an issue whose tracker is selected in the plugin settings. The **Test
+   Cases** section is shown below the issue details.
+2. Use **Add Test Case** to create a test case. Each test case has a Test Case
+   ID (e.g. `TC_UI_001`), title, preconditions, free-text steps, structured
+   steps, expected result, actual result, status and comments.
+3. Use **Export to CSV** to download all test cases, or **Print View** for a
+   printer-friendly report.
 
-1. Create or open an issue with the configured tracker
-2. Click the **Test Cases** tab
-3. Use **Add Test Case** to create new test cases
-   ![Input Form](img/input.png)
-4. Each test case includes:
-   - Test Case ID (e.g., TC_UI_001)
-   - Title
-   - Preconditions
-   - Test Steps
-   - Expected Result
-   - Actual Result
-   - Status
-   - Comments
-   ![Expanded TestCase](img/expanded_testcase.png)
-5. Use **Export CSV** to download all test cases
-   ![Exported CSV](img/exported_csv.png)
-6. Use **Print View** to generate a printer-friendly report
-   ![HTML Friendly Print](img/html_friendly_print.png)
+### Structured steps
 
-## REST API
+The free-text **Test Steps** field remains available. Below it, the structured
+steps table stores one row per step with action, test data, expected result,
+actual result and status. Use **Add step** and **Remove** to edit rows. Steps
+are shown as a numbered table in the issue view and the print view, and are
+appended to the CSV "Test Steps" cell as `1. action | data | expected` lines.
 
-Every endpoint is scoped to an issue. The `test_cases` project module must be
-enabled for the issue's project and the user needs `view_test_cases` (read) or
-`manage_test_cases` (write). Authenticate with an API key header or HTTP basic
-auth; JSON endpoints skip session authentication.
+### Inline images
 
-| Method | Path | Permission |
-|--------|------|------------|
-| GET | `/issues/:issue_id/testcases.json` | view_test_cases |
-| GET | `/issues/:issue_id/testcases/:id.json` | view_test_cases |
-| POST | `/issues/:issue_id/testcases.json` | manage_test_cases |
-| PATCH/PUT | `/issues/:issue_id/testcases/:id.json` | manage_test_cases |
-| DELETE | `/issues/:issue_id/testcases/:id.json` | manage_test_cases |
-| PATCH | `/issues/:issue_id/testcases/reorder.json` | manage_test_cases |
-| POST | `/issues/:issue_id/testcases/bulk_update.json` | manage_test_cases |
+Every text field uses Redmine's wiki formatting and attachments:
 
-```bash
-# List
-curl -H 'X-Redmine-API-Key: YOUR_KEY' \
-  'http://redmine/issues/1/testcases.json'
+- Paste an image from the clipboard or drag it onto a text area. Redmine
+  uploads it to the attachments form and inserts the wiki markup at the cursor.
+- Textile (default): `!file.png!`
+- CommonMark: `![](file.png)`
+- The **Preview** button in the wiki toolbar renders the field with images.
 
-# Show
-curl -u admin:YOUR_PASSWORD 'http://redmine/issues/1/testcases/4.json'
+Images are stored as normal attachments of the test case, so existing
+attachment permissions, thumbnails and quotas apply. The print view renders the
+images, and CSV keeps the raw markup.
 
-# Create (201 with the test case)
-curl -u admin:YOUR_PASSWORD -H 'Content-Type: application/json' \
-  -X POST 'http://redmine/issues/1/testcases.json' \
-  -d '{"testcase":{"test_case_id":"TC_001","title":"Login","status":"not_executed"}}'
+### Reorder and bulk update
 
-# Update (200 with the test case)
-curl -u admin:YOUR_PASSWORD -H 'Content-Type: application/json' \
-  -X PATCH 'http://redmine/issues/1/testcases/4.json' \
-  -d '{"testcase":{"status":"passed"}}'
+Users with **Manage test cases** can drag test cases by their header to change
+the order, or select several test cases with the checkboxes, choose a status and
+click **Apply**.
 
-# Delete (204)
-curl -u admin:YOUR_PASSWORD -X DELETE 'http://redmine/issues/1/testcases/4.json'
+### Copying an issue
 
-# Reorder (200)
-curl -u admin:YOUR_PASSWORD -H 'Content-Type: application/json' \
-  -X PATCH 'http://redmine/issues/1/testcases/reorder.json' \
-  -d '{"ordered_ids":[4,2,3]}'
+When an issue is copied and the target tracker is enabled for test cases, all
+test cases are copied with:
 
-# Bulk status update (200, {"updated":2})
-curl -u admin:YOUR_PASSWORD -H 'Content-Type: application/json' \
-  -X POST 'http://redmine/issues/1/testcases/bulk_update.json' \
-  -d '{"ids":[4,2],"status":"passed"}'
+- status reset to *Not Executed* and the actual result cleared
+- the same position order
+- their attachments
+- their structured steps (step status reset and actual result cleared)
+
+### Change history
+
+Enable **Log test case changes as issue notes** in the plugin settings to add a
+note to the parent issue whenever a test case is created, changed or deleted.
+Notes are written as the current user. The setting is off by default because
+issue notes send notifications to watchers.
+
+Example note:
+
+```
+Test case TC_001 'Login': Status: Not Executed / Not Run → Passed
 ```
 
-Validation failures return `422` with `{"errors": ["..."]}`; missing
-permission returns `403`.
+Only actual field changes are logged; saving without changes adds nothing.
 
 ## Test Case Statuses
 
@@ -138,29 +146,104 @@ permission returns `403`.
 - Reopened
 - Closed / Completed
 
+## REST API
+
+Every endpoint is scoped to an issue. The `test_cases` project module must be
+enabled for the issue's project and the user needs `view_test_cases` (read) or
+`manage_test_cases` (write). Authenticate with an API key header or HTTP basic
+auth; JSON requests skip session authentication.
+
+| Method | Path | Permission | Response |
+|--------|------|------------|----------|
+| GET | `/issues/:issue_id/testcases.json` | view_test_cases | 200, array |
+| GET | `/issues/:issue_id/testcases/:id.json` | view_test_cases | 200, test case |
+| POST | `/issues/:issue_id/testcases.json` | manage_test_cases | 201, test case |
+| PATCH/PUT | `/issues/:issue_id/testcases/:id.json` | manage_test_cases | 200, test case |
+| DELETE | `/issues/:issue_id/testcases/:id.json` | manage_test_cases | 204 |
+| PATCH | `/issues/:issue_id/testcases/reorder.json` | manage_test_cases | 200 |
+| POST | `/issues/:issue_id/testcases/bulk_update.json` | manage_test_cases | 200 |
+
+A test case object contains `id`, `issue_id`, `test_case_id`, `title`,
+`preconditions`, `steps`, `expected_result`, `actual_result`, `status`,
+`comments`, `position`, `created_on`, `updated_on`, `attachments` (`id`,
+`filename`, `content_url`) and `testcase_steps` (`id`, `position`, `action`,
+`test_data`, `expected_result`, `actual_result`, `status`).
+
+```bash
+# List test cases
+curl -H 'X-Redmine-API-Key: YOUR_KEY' \
+  'http://redmine/issues/1/testcases.json'
+
+# Show one test case
+curl -u admin:YOUR_PASSWORD 'http://redmine/issues/1/testcases/4.json'
+
+# Create (201 with the test case body)
+curl -u admin:YOUR_PASSWORD -H 'Content-Type: application/json' \
+  -X POST 'http://redmine/issues/1/testcases.json' \
+  -d '{"testcase":{"test_case_id":"TC_001","title":"Login","status":"not_executed",
+       "testcase_steps_attributes":[{"action":"Open the page","expected_result":"Page loads"}]}}'
+
+# Update (200 with the test case body)
+curl -u admin:YOUR_PASSWORD -H 'Content-Type: application/json' \
+  -X PATCH 'http://redmine/issues/1/testcases/4.json' \
+  -d '{"testcase":{"status":"passed"}}'
+
+# Delete (204)
+curl -u admin:YOUR_PASSWORD -X DELETE 'http://redmine/issues/1/testcases/4.json'
+
+# Reorder (200). ordered_ids must belong to the issue.
+curl -u admin:YOUR_PASSWORD -H 'Content-Type: application/json' \
+  -X PATCH 'http://redmine/issues/1/testcases/reorder.json' \
+  -d '{"ordered_ids":[4,2,3]}'
+
+# Bulk status update (200, {"updated":2})
+curl -u admin:YOUR_PASSWORD -H 'Content-Type: application/json' \
+  -X POST 'http://redmine/issues/1/testcases/bulk_update.json' \
+  -d '{"ids":[4,2],"status":"passed"}'
+```
+
+Validation failures return `422` with `{"errors": ["..."]}`; missing permission
+returns `403`.
+
 ## Compatibility
 
-Tested successfully on Redmine 6.1.X and 6.0.X.
+Tested on Redmine 6.1.x (Rails 7.2) and Redmine 7.0.x (Rails 8.1), with SQLite
+and PostgreSQL.
+
+| Redmine | Rails | Status |
+|---------|-------|--------|
+| 6.1.x | 7.2 | Tested |
+| 7.0.x | 8.1 | Tested |
 
 | Locale | Status |
 |--------|--------|
-| en     | Full support |
-| lt     | Full support |
-| de     | Not supported |
-| es     | Not supported |
-| fr     | Not supported |
-| it     | Not supported |
-| ja     | Not supported |
-| ru     | Not supported |
+| en | Full support |
+| lt | Full support |
+| de | Older strings translated; new strings fall back to English |
+| es | Older strings translated; new strings fall back to English |
+| fr | Older strings translated; new strings fall back to English |
+| it | Older strings translated; new strings fall back to English |
+| ja | Older strings translated; new strings fall back to English |
+| ru | Older strings translated; new strings fall back to English |
 
-## Upgrade
+## Upgrading from 0.1.x
 
-```bash
-cd /path/to/redmine
-bundle exec rake redmine:plugins:migrate RAILS_ENV=production
-bundle exec rake assets:precompile
-touch tmp/restart.txt
-```
+1. Copy the new plugin version over the old directory.
+2. Enable the **Test cases** project module in every project that should use the
+   plugin, then grant the role permissions there. Permissions were global in
+   0.1.x and are project-scoped from 0.2.0 on.
+3. The existing single-tracker setting is still honored. Open the plugin
+   settings once to save the new multi-tracker checkbox list.
+4. Run the migrations and precompile assets:
+   ```bash
+   bundle exec rake redmine:plugins:migrate NAME=redmine_testcase RAILS_ENV=production
+   bundle exec rake assets:precompile RAILS_ENV=production
+   ```
+5. Restart Redmine.
+
+Migration `002_create_testcase_steps` can be rolled back with
+`VERSION=1` on a test installation; it never touches the existing `steps`
+column.
 
 ## Uninstall
 
@@ -173,9 +256,11 @@ touch tmp/restart.txt
 
 ## Support
 
-For issues and feature requests, please visit: [GitHub Issues](https://github.com/jonasliu95/redmine_testcase/issues)
+For issues and feature requests, please visit:
+[GitHub Issues](https://github.com/jonasliu95/redmine_testcase/issues)
 
-Improvements are widely accepted! If you have any suggestions, bug reports, or translation updates, please open an issue in GitHub.
+Improvements are widely accepted! If you have any suggestions, bug reports, or
+translation updates, please open an issue on GitHub.
 
 ## License
 
