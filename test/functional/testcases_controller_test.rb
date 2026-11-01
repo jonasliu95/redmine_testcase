@@ -61,6 +61,27 @@ class TestcasesControllerTest < ActionController::TestCase
     assert_equal "'@SUM(A1:A2)", row[9]
   end
 
+  def test_export_csv_keeps_raw_inline_image_markup
+    testcase = Testcase.create!(
+      issue: @issue,
+      test_case_id: 'TC_CSV_IMAGE',
+      title: 'Image test case',
+      status: 'not_executed',
+      steps: '!qa.png!'
+    )
+    Attachment.create!(
+      container: testcase,
+      file: qa_png,
+      author_id: @admin.id
+    )
+
+    get :export_csv, params: {issue_id: @issue.id, encoding: 'UTF-8'}
+
+    assert_response :success
+    body = response.body.dup.force_encoding('UTF-8').sub("\xEF\xBB\xBF", '')
+    assert_includes body, '!qa.png!'
+  end
+
   def test_new_form_has_wiki_toolbars_and_attachment_drop_target
     get :new, params: {issue_id: @issue.id}
 
@@ -236,6 +257,13 @@ class TestcasesControllerTest < ActionController::TestCase
 
   def valid_testcase_attributes
     {test_case_id: 'TC_PERM', title: 'Permission test case', status: 'not_executed'}
+  end
+
+  def qa_png
+    Rack::Test::UploadedFile.new(
+      File.expand_path('../fixtures/files/qa.png', __dir__),
+      'image/png'
+    )
   end
 
   def create_private_project_issue
