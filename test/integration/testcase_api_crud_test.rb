@@ -47,6 +47,12 @@ class TestcaseApiCrudTest < Redmine::IntegrationTest
       file: qa_png,
       author_id: @admin.id
     )
+    TestcaseStep.create!(
+      testcase: @testcase,
+      action: 'Open the page',
+      expected_result: 'Page loads',
+      status: 'passed'
+    )
 
     get "/issues/#{@issue.id}/testcases/#{@testcase.id}.json", headers: basic_auth_headers
 
@@ -56,6 +62,9 @@ class TestcaseApiCrudTest < Redmine::IntegrationTest
     assert_equal 1, testcase['attachments'].size
     assert_equal 'qa.png', testcase['attachments'].first['filename']
     assert_match(/qa\.png/, testcase['attachments'].first['content_url'])
+    assert_equal 1, testcase['testcase_steps'].size
+    assert_equal 'Open the page', testcase['testcase_steps'].first['action']
+    assert_equal 'passed', testcase['testcase_steps'].first['status']
   end
 
   def test_create_with_basic_auth

@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function initTestCases() {
   initTestcaseSortable();
+  initTestcaseStepRows();
   // Add toggle functionality to test case items
   const testcaseHeaders = document.querySelectorAll('.testcase-header');
 
@@ -178,5 +179,90 @@ function initTestcaseSortable() {
         });
       }
     });
+  });
+}
+
+
+function initTestcaseStepRows() {
+  var body = document.getElementById('testcase-steps-body');
+  var template = document.getElementById('testcase-step-template');
+  var addButton = document.getElementById('add-testcase-step');
+  if (!body || !template) {
+    return;
+  }
+
+  if (!body.dataset.rowsBound) {
+    body.dataset.rowsBound = 'true';
+    body.addEventListener('click', function(e) {
+      var link = e.target.closest('.remove-testcase-step');
+      if (!link) {
+        return;
+      }
+      e.preventDefault();
+      var row = link.closest('.testcase-step-row');
+      if (!row) {
+        return;
+      }
+      if (row.dataset.persisted === 'true') {
+        var destroy = row.querySelector('.testcase-step-destroy');
+        if (destroy) {
+          destroy.value = '1';
+        }
+        row.style.display = 'none';
+      } else {
+        row.parentNode.removeChild(row);
+      }
+      renumberTestcaseSteps();
+    });
+  }
+
+  if (addButton && !addButton.dataset.bound) {
+    addButton.dataset.bound = 'true';
+    addButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      var index = 'new_' + Date.now();
+      var html = template.innerHTML.replace(/NEW_RECORD/g, index);
+      var wrapper = document.createElement('tbody');
+      wrapper.innerHTML = html;
+      var row = wrapper.firstElementChild;
+      if (!row) {
+        return;
+      }
+      body.appendChild(row);
+      initTestcaseStepToolbars(row);
+      renumberTestcaseSteps();
+    });
+  }
+
+  renumberTestcaseSteps();
+}
+
+function initTestcaseStepToolbars(row) {
+  if (typeof jsToolBar === 'undefined') {
+    return;
+  }
+  var table = document.getElementById('testcase-steps-table');
+  var previewUrl = table ? table.dataset.previewUrl : null;
+  row.querySelectorAll('textarea.wiki-edit').forEach(function(textarea) {
+    var toolbar = new jsToolBar(textarea);
+    if (previewUrl) {
+      toolbar.setPreviewUrl(previewUrl);
+    }
+    toolbar.draw();
+  });
+}
+
+function renumberTestcaseSteps() {
+  var rows = document.querySelectorAll('#testcase-steps-body .testcase-step-row');
+  var visibleIndex = 0;
+  rows.forEach(function(row) {
+    if (row.style.display === 'none') {
+      return;
+    }
+    visibleIndex += 1;
+    var cell = row.querySelector('.step-number');
+    if (cell) {
+      cell.textContent = visibleIndex;
+    }
   });
 }

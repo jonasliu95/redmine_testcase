@@ -32,7 +32,7 @@ class TestcaseStepTest < ActiveSupport::TestCase
     step = TestcaseStep.new(action: 'Open the page', status: 'not_executed')
 
     assert_not step.valid?
-    assert step.errors[:testcase_id].present?
+    assert step.errors[:testcase].present?
   end
 
   def test_should_validate_status_inclusion

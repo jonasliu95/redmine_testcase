@@ -23,6 +23,14 @@ class IssueCopyTest < ActiveSupport::TestCase
       file: qa_png,
       author_id: User.find(1).id
     )
+    TestcaseStep.create!(
+      testcase: @testcase,
+      action: 'Open the page',
+      test_data: 'user@example.com',
+      expected_result: 'Page loads',
+      status: 'passed',
+      actual_result: 'It loaded'
+    )
   end
 
   def teardown
@@ -43,6 +51,12 @@ class IssueCopyTest < ActiveSupport::TestCase
     assert_nil copied.actual_result
     assert_equal 3, copied.position
     assert_equal ['qa.png'], copied.attachments.map(&:filename)
+
+    copied_step = copied.testcase_steps.first
+    assert_equal 'Open the page', copied_step.action
+    assert_equal 'user@example.com', copied_step.test_data
+    assert_equal 'not_executed', copied_step.status
+    assert_nil copied_step.actual_result
   end
 
   def test_copying_an_issue_without_enabled_tracker_does_not_copy_test_cases

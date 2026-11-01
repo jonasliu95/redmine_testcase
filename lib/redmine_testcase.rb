@@ -59,6 +59,18 @@ module RedmineTestcase
         end
 
         copy.attachments = source.attachments.map { |attachment| attachment.copy(container: copy) }
+
+        source.testcase_steps.each do |step|
+          step_copy = step.dup
+          step_copy.assign_attributes(
+            status: 'not_executed',
+            actual_result: nil,
+            position: step.position,
+            created_at: nil,
+            updated_at: nil
+          )
+          copy.testcase_steps << step_copy
+        end
       end
     rescue StandardError => e
       details = e.message.to_s

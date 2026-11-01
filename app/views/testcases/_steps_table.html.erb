@@ -1,0 +1,24 @@
+<table class="list testcase-steps-table">
+  <thead>
+    <tr>
+      <th class="step-number"><%= l(:label_test_case_step_number) %></th>
+      <th><%= l(:label_test_case_step_action) %></th>
+      <th><%= l(:label_test_case_step_data) %></th>
+      <th><%= l(:label_test_case_step_expected) %></th>
+      <th><%= l(:label_test_case_step_actual) %></th>
+      <th><%= l(:label_test_case_status) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% testcase.testcase_steps.each_with_index do |step, index| %>
+      <tr>
+        <td class="step-number"><%= index + 1 %></td>
+        <td><%= format_testcase_field(step.action, testcase) %></td>
+        <td><%= format_testcase_field(step.test_data, testcase) %></td>
+        <td><%= format_testcase_field(step.expected_result, testcase) %></td>
+        <td><%= format_testcase_field(step.actual_result, testcase) %></td>
+        <td><%= testcase_status_badge(step) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

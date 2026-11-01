@@ -36,6 +36,37 @@
     </p>
 
     <p>
+      <label><%= l(:label_test_case_structured_steps) %></label>
+    </p>
+    <table class="list testcase-steps-table" id="testcase-steps-table"
+           data-preview-url="<%= preview_text_path %>">
+      <thead>
+        <tr>
+          <th class="step-number"><%= l(:label_test_case_step_number) %></th>
+          <th><%= l(:label_test_case_step_action) %></th>
+          <th><%= l(:label_test_case_step_data) %></th>
+          <th><%= l(:label_test_case_step_expected) %></th>
+          <th><%= l(:label_test_case_step_actual) %></th>
+          <th><%= l(:label_test_case_status) %></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="testcase-steps-body">
+        <%= f.fields_for :testcase_steps do |step_form| %>
+          <%= render 'testcase_step_fields', f: step_form, toolbar: true %>
+        <% end %>
+      </tbody>
+    </table>
+    <p>
+      <%= link_to l(:button_add_step), '#', id: 'add-testcase-step', class: 'icon icon-add' %>
+    </p>
+    <template id="testcase-step-template">
+      <%= f.fields_for :testcase_steps, TestcaseStep.new, child_index: 'NEW_RECORD' do |step_form| %>
+        <%= render 'testcase_step_fields', f: step_form, toolbar: false %>
+      <% end %>
+    </template>
+
+    <p>
       <%= f.label :expected_result, l(:label_test_case_expected) %>
       <%= f.text_area :expected_result, rows: 5, class: 'wiki-edit', maxlength: 10000 %>
       <%= wikitoolbar_for 'testcase_expected_result' %>

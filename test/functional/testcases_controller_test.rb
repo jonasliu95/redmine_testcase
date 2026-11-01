@@ -82,6 +82,82 @@ class TestcasesControllerTest < ActionController::TestCase
     assert_includes body, '!qa.png!'
   end
 
+  def test_create_with_structured_steps
+    assert_difference 'TestcaseStep.count', 2 do
+      post :create, params: {
+        issue_id: @issue.id,
+        testcase: valid_testcase_attributes.merge(
+          testcase_steps_attributes: {
+            '0' => {action: 'Open the page', test_data: 'user@example.com', expected_result: 'Page loads', status: 'not_executed'},
+            '1' => {action: 'Click login', test_data: '', expected_result: 'Logged in', status: 'not_executed'}
+          }
+        )
+      }
+    end
+
+    assert_redirected_to issue_path(@issue, tab: 'testcases')
+    testcase = Testcase.find_by(test_case_id: 'TC_PERM')
+    assert_equal ['Open the page', 'Click login'], testcase.testcase_steps.map(&:action)
+    assert_equal [1, 2], testcase.testcase_steps.map(&:position)
+  end
+
+  def test_update_structured_steps
+    testcase = Testcase.create!(valid_testcase_attributes.merge(issue: @issue))
+    step = TestcaseStep.create!(testcase: testcase, action: 'Old action')
+
+    patch :update, params: {
+      issue_id: @issue.id,
+      id: testcase.id,
+      testcase: {
+        testcase_steps_attributes: {
+          '0' => {id: step.id, action: 'New action', status: 'passed'}
+        }
+      }
+    }
+
+    assert_redirected_to issue_path(@issue, tab: 'testcases')
+    assert_equal 'New action', step.reload.action
+    assert_equal 'passed', step.status
+  end
+
+  def test_destroy_structured_step
+    testcase = Testcase.create!(valid_testcase_attributes.merge(issue: @issue))
+    step = TestcaseStep.create!(testcase: testcase, action: 'Remove me')
+
+    assert_difference 'TestcaseStep.count', -1 do
+      patch :update, params: {
+        issue_id: @issue.id,
+        id: testcase.id,
+        testcase: {
+          testcase_steps_attributes: {
+            '0' => {id: step.id, _destroy: '1'}
+          }
+        }
+      }
+    end
+
+    assert_redirected_to issue_path(@issue, tab: 'testcases')
+  end
+
+  def test_export_csv_appends_structured_steps_to_the_steps_cell
+    testcase = Testcase.create!(
+      valid_testcase_attributes.merge(issue: @issue, steps: 'Free text steps')
+    )
+    TestcaseStep.create!(
+      testcase: testcase,
+      action: 'Open the page',
+      test_data: 'user@example.com',
+      expected_result: 'Page loads'
+    )
+
+    get :export_csv, params: {issue_id: @issue.id, encoding: 'UTF-8'}
+
+    assert_response :success
+    body = response.body.dup.force_encoding('UTF-8').sub("\xEF\xBB\xBF", '')
+    rows = CSV.parse(body)
+    assert_equal 'Free text steps' + "\n" + '1. Open the page | user@example.com | Page loads', rows.last[5]
+  end
+
   def test_new_form_has_wiki_toolbars_and_attachment_drop_target
     get :new, params: {issue_id: @issue.id}
 
@@ -92,6 +168,8 @@ class TestcasesControllerTest < ActionController::TestCase
     end
     assert_match(/attachments\[dummy\]\[file\]/, response.body)
     assert_match(/class="[^"]*filedrop/, response.body)
+    assert_match(/id="testcase-steps-table"/, response.body)
+    assert_match(/id="add-testcase-step"/, response.body)
   end
 
   def test_edit_form_has_wiki_toolbars_and_attachment_drop_target
