@@ -221,8 +221,16 @@ class TestcasesController < ApplicationController
     if RedmineTestcase.tracker_configured?
       render_403
     else
-      flash[:error] = l(:text_no_tracker_selected)
-      redirect_to issue_path(@issue)
+      respond_to do |format|
+        format.html do
+          flash[:error] = l(:text_no_tracker_selected)
+          redirect_to issue_path(@issue)
+        end
+        format.json do
+          render json: {error: l(:text_no_tracker_selected)}, status: :forbidden
+        end
+        format.any { head :forbidden }
+      end
     end
   end
 

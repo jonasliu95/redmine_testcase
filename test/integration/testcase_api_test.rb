@@ -52,6 +52,25 @@ class TestcaseApiTest < Redmine::IntegrationTest
     assert_redirected_to "/issues/#{@issue.id}?tab=testcases"
   end
 
+  def test_index_json_without_configured_tracker_returns_json_403
+    Setting.plugin_redmine_testcase = {'testcase_tracker_id' => nil}
+
+    get "/issues/#{@issue.id}/testcases.json", headers: basic_auth_headers
+
+    assert_response :forbidden
+    assert_equal 'application/json', response.media_type
+    assert JSON.parse(response.body)['error'].present?
+  end
+
+  def test_index_html_without_configured_tracker_redirects
+    Setting.plugin_redmine_testcase = {'testcase_tracker_id' => nil}
+    log_user('admin', 'admin')
+
+    get "/issues/#{@issue.id}/testcases"
+
+    assert_redirected_to "/issues/#{@issue.id}"
+  end
+
   private
 
   def basic_auth_headers
