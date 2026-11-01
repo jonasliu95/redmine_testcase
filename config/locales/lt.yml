@@ -90,15 +90,7 @@ lt:
   text_testcase_changed_note: "Testų atvejis %{test_case_id} „%{title}“: %{changes}."
   text_testcase_change: "%{field}: %{old} → %{new}"
 
-  # Structured steps
-  label_test_case_structured_steps: "Struktūrizuoti žingsniai"
-  label_test_case_step_number: "Žingsnis"
-  label_test_case_step_action: "Veiksmas"
-  label_test_case_step_data: "Testo duomenys"
-  label_test_case_step_expected: "Laukiamas rezultatas"
-  label_test_case_step_actual: "Faktinis rezultatas"
-  button_add_step: "Pridėti žingsnį"
-  button_remove_step: "Pašalinti"
   text_testcases_bulk_status_note: "Testų atvejai %{test_cases}: būsena → %{status}"
   text_testcase_module_disabled_projects: "Šiuose projektuose neįjungtas modulis \"Testų atvejai\", todėl testų atvejai ten nerodomi. Įjunkite jį projekto nustatymuose → Moduliai:"
   text_testcase_module_more_projects: "ir dar %{count}"
+  text_testcase_paste_images: "Čia galite įklijuoti arba nutempti paveikslėlius."

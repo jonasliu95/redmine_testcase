@@ -82,7 +82,6 @@ class TestcaseHistoryTest < ActiveSupport::TestCase
   def test_destroying_an_issue_with_test_cases_does_not_raise_or_add_a_note
     enable_history
     testcase = Testcase.create!(issue: @issue, test_case_id: 'TC_H6', title: 'History', status: 'not_executed')
-    TestcaseStep.create!(testcase: testcase, action: 'A step')
     issue_id = @issue.id
     original_notified_events = Setting.notified_events
     Setting.notified_events = []

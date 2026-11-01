@@ -90,15 +90,7 @@ es:
   text_testcase_changed_note: "Test case %{test_case_id} '%{title}': %{changes}."
   text_testcase_change: "%{field}: %{old} → %{new}"
 
-  # Structured steps
-  label_test_case_structured_steps: "Structured steps"
-  label_test_case_step_number: "Step"
-  label_test_case_step_action: "Action"
-  label_test_case_step_data: "Test data"
-  label_test_case_step_expected: "Expected result"
-  label_test_case_step_actual: "Actual result"
-  button_add_step: "Add step"
-  button_remove_step: "Remove"
   text_testcases_bulk_status_note: "Test cases %{test_cases}: status → %{status}"
   text_testcase_module_disabled_projects: "The \"Test cases\" project module is not enabled in these projects, so test cases are hidden there. Enable it under Project settings → Modules:"
   text_testcase_module_more_projects: "and %{count} more"
+  text_testcase_paste_images: "Paste or drag images here."

@@ -81,45 +81,6 @@ class TestcaseAttachmentsTest < Redmine::IntegrationTest
     assert_match(/<img[^>]+src="[^"]*qa\.png/, response.body)
   end
 
-  def test_index_renders_inline_image_in_structured_step
-    @testcase.update!(steps: nil)
-    TestcaseStep.create!(
-      testcase: @testcase,
-      action: '!qa.png!',
-      test_data: 'qa.png',
-      status: 'not_executed'
-    )
-    log_user('admin', 'admin')
-
-    with_text_formatting('textile') do
-      get "/issues/#{@issue.id}/testcases"
-    end
-
-    assert_response :success
-    assert_match(/testcase-steps-table/, response.body)
-    assert_match(/<img[^>]+src="[^"]*qa\.png/, response.body)
-  end
-
-  def test_print_view_renders_structured_steps
-    @testcase.update!(steps: nil)
-    TestcaseStep.create!(
-      testcase: @testcase,
-      action: 'Open the page',
-      test_data: 'user@example.com',
-      expected_result: 'Page loads',
-      status: 'passed'
-    )
-    log_user('admin', 'admin')
-
-    get "/issues/#{@issue.id}/testcases/print_view"
-
-    assert_response :success
-    assert_match(/testcase-steps-table/, response.body)
-    assert_match(/Open the page/, response.body)
-    assert_match(/user@example.com/, response.body)
-    assert_match(/Page loads/, response.body)
-  end
-
   private
 
   def with_text_formatting(format)

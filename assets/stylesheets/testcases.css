@@ -291,8 +291,7 @@ p.nodata {
 
 /* Inline images in test case fields */
 .testcase-field img,
-.testcase-print-item img,
-.testcase-steps-table img {
+.testcase-print-item img {
   max-width: 100%;
   height: auto;
 }

@@ -14,7 +14,7 @@ class TestcasesController < ApplicationController
   helper :attachments
 
   def index
-    @testcases = @issue.testcases.includes(:attachments, :issue, :testcase_steps).order(:position)
+    @testcases = @issue.testcases.includes(:attachments, :issue).order(:position)
     @summary = Testcase.summary(@issue.testcases)
 
     respond_to do |format|
@@ -33,7 +33,6 @@ class TestcasesController < ApplicationController
   def new
     @testcase = @issue.testcases.build
     @testcase.status = 'not_executed'
-    @testcase.testcase_steps.build if @testcase.testcase_steps.empty?
   end
 
   def create
@@ -175,7 +174,7 @@ class TestcasesController < ApplicationController
   end
 
   def export_csv
-    @testcases = @issue.testcases.includes(:testcase_steps).order(:position)
+    @testcases = @issue.testcases.order(:position)
 
     csv_data = generate_csv(@testcases)
 
@@ -185,7 +184,7 @@ class TestcasesController < ApplicationController
   end
 
   def print_view
-    @testcases = @issue.testcases.includes(:attachments, :issue, :testcase_steps).order(:position)
+    @testcases = @issue.testcases.includes(:attachments, :issue).order(:position)
     @summary = Testcase.summary(@issue.testcases)
 
     render layout: 'base'
@@ -244,17 +243,7 @@ class TestcasesController < ApplicationController
       :actual_result,
       :status,
       :comments,
-      :position,
-      testcase_steps_attributes: [
-        :id,
-        :position,
-        :action,
-        :test_data,
-        :expected_result,
-        :actual_result,
-        :status,
-        :_destroy
-      ]
+      :position
     )
   end
 
@@ -278,17 +267,6 @@ class TestcasesController < ApplicationController
           id: attachment.id,
           filename: attachment.filename,
           content_url: download_named_attachment_path(attachment, attachment.filename)
-        }
-      end,
-      testcase_steps: testcase.testcase_steps.map do |step|
-        {
-          id: step.id,
-          position: step.position,
-          action: step.action,
-          test_data: step.test_data,
-          expected_result: step.expected_result,
-          actual_result: step.actual_result,
-          status: step.status
         }
       end
     }
@@ -322,7 +300,7 @@ class TestcasesController < ApplicationController
           tc.test_case_id,
           tc.title,
           tc.preconditions,
-          csv_steps(tc),
+          tc.steps,
           tc.expected_result,
           tc.actual_result,
           tc.status_label,
@@ -331,19 +309,6 @@ class TestcasesController < ApplicationController
         ].map { |value| csv_safe(value) }
       end
     end
-  end
-
-  # Free-text steps followed by structured steps, one "1. action | data | expected" line each.
-  def csv_steps(testcase)
-    structured = testcase.testcase_steps.map.with_index do |step, index|
-      values = [step.action, step.test_data, step.expected_result]
-               .map { |value| value.to_s.strip }.reject(&:blank?)
-      next if values.empty?
-
-      "#{index + 1}. #{values.join(' | ')}"
-    end.compact.join("\n")
-
-    [testcase.steps, structured].reject(&:blank?).join("\n")
   end
 
   # Prevent spreadsheet formula injection when a cell starts with =, +, - or @.

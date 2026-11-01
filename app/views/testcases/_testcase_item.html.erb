@@ -42,13 +42,6 @@
       </div>
     <% end %>
 
-    <% if testcase.testcase_steps.any? %>
-      <div class="testcase-field testcase-structured-steps">
-        <strong><%= l(:label_test_case_structured_steps) %>:</strong>
-        <%= render 'testcases/steps_table', testcase: testcase %>
-      </div>
-    <% end %>
-
     <% if testcase.expected_result.present? %>
       <div class="testcase-field">
         <strong><%= l(:label_test_case_expected) %>:</strong>

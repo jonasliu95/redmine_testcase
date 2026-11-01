@@ -8,8 +8,7 @@ A Redmine plugin for managing manual test cases within issues.
 
 - One or more test-case trackers per installation
 - Test cases attached to issues, with status workflow and summary
-- Structured steps (action, test data, expected/actual result, per-step status)
-- Inline images in every test case text field (paste, drag and drop, or wiki markup)
+- Pictures in every test case text field: paste or drag an image into the field
 - Drag-to-reorder and bulk status update for users who can manage test cases
 - Copy test cases when an issue is copied
 - Optional issue notes for test case changes
@@ -76,28 +75,20 @@ project cannot read or change test cases in this project.
 1. Open an issue whose tracker is selected in the plugin settings. The **Test
    Cases** section is shown below the issue details.
 2. Use **Add Test Case** to create a test case. Each test case has a Test Case
-   ID (e.g. `TC_UI_001`), title, preconditions, free-text steps, structured
-   steps, expected result, actual result, status and comments.
+   ID (e.g. `TC_UI_001`), title, preconditions, steps, expected result, actual result, status and comments.
 3. Use **Export to CSV** to download all test cases, or **Print View** for a
    printer-friendly report.
 
-### Structured steps
+### Pictures in test case fields
 
-The free-text **Test Steps** field remains available. Below it, the structured
-steps table stores one row per step with action, test data, expected result,
-actual result and status. Use **Add step** and **Remove** to edit rows. Steps
-are shown as a numbered table in the issue view and the print view, and are
-appended to the CSV "Test Steps" cell as `1. action | data | expected` lines.
+Preconditions, Test Steps, Expected Result, Actual Result and Comments accept
+pictures:
 
-### Inline images
-
-Every text field uses Redmine's wiki formatting and attachments:
-
-- Paste an image from the clipboard or drag it onto a text area. Redmine
-  uploads it to the attachments form and inserts the wiki markup at the cursor.
-- Textile (default): `!file.png!`
-- CommonMark: `![](file.png)`
-- The **Preview** button in the wiki toolbar renders the field with images.
+- Paste a screenshot from the clipboard, or drag an image file onto the text
+  box. Redmine uploads it and inserts a reference at the cursor; the picture is
+  shown in that field when the test case is saved.
+- You can also reference any attachment of the test case by hand:
+  `!file.png!` (Textile) or `![](file.png)` (CommonMark).
 
 Images are stored as normal attachments of the test case, so existing
 attachment permissions, thumbnails and quotas apply. The print view renders the
@@ -117,7 +108,6 @@ test cases are copied with:
 - status reset to *Not Executed* and the actual result cleared
 - the same position order
 - their attachments
-- their structured steps (step status reset and actual result cleared)
 
 ### Change history
 
@@ -166,8 +156,7 @@ auth; JSON requests skip session authentication.
 A test case object contains `id`, `issue_id`, `test_case_id`, `title`,
 `preconditions`, `steps`, `expected_result`, `actual_result`, `status`,
 `comments`, `position`, `created_on`, `updated_on`, `attachments` (`id`,
-`filename`, `content_url`) and `testcase_steps` (`id`, `position`, `action`,
-`test_data`, `expected_result`, `actual_result`, `status`).
+`filename`, `content_url`).
 
 ```bash
 # List test cases
@@ -181,7 +170,7 @@ curl -u admin:YOUR_PASSWORD 'http://redmine/issues/1/testcases/4.json'
 curl -u admin:YOUR_PASSWORD -H 'Content-Type: application/json' \
   -X POST 'http://redmine/issues/1/testcases.json' \
   -d '{"testcase":{"test_case_id":"TC_001","title":"Login","status":"not_executed",
-       "testcase_steps_attributes":[{"action":"Open the page","expected_result":"Page loads"}]}}'
+       "steps":"1. Open the page"}}'
 
 # Update (200 with the test case body)
 curl -u admin:YOUR_PASSWORD -H 'Content-Type: application/json' \
@@ -240,10 +229,6 @@ and PostgreSQL.
    bundle exec rake assets:precompile RAILS_ENV=production
    ```
 5. Restart Redmine.
-
-Migration `002_create_testcase_steps` can be rolled back with
-`VERSION=1` on a test installation; it never touches the existing `steps`
-column.
 
 ## Uninstall
 

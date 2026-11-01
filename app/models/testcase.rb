@@ -1,14 +1,5 @@
 class Testcase < ApplicationRecord
   belongs_to :issue
-  has_many :testcase_steps,
-           -> { order(:position) },
-           class_name: 'TestcaseStep',
-           dependent: :destroy,
-           inverse_of: :testcase
-
-  accepts_nested_attributes_for :testcase_steps,
-                                allow_destroy: true,
-                                reject_if: :all_blank
 
   # Attachments support
   acts_as_attachable view_permission: :view_test_cases,

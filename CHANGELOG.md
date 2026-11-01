@@ -7,23 +7,19 @@
 - Multiple test case trackers. `testcase_tracker_ids` accepts a list of tracker
   ids; the legacy single `testcase_tracker_id` setting keeps working until the
   new setting is saved.
-- Structured test case steps (action, test data, expected/actual result and
-  status) with add/remove rows in the form, numbered tables in the issue and
-  print views, copy support, API output and CSV export.
-- Inline images in preconditions, steps, expected/actual result, comments and
-  structured step fields using Redmine attachments and wiki formatting
-  (`!file.png!` for Textile, `![](file.png)` for CommonMark). Paste and
-  drag-and-drop upload go through Redmine's attachments form.
+- Pictures in preconditions, steps, expected/actual result and comments: paste
+  or drag an image into the field and it is shown there. Images are stored as
+  test case attachments (`!file.png!` for Textile, `![](file.png)` for
+  CommonMark). The form keeps the simple text boxes, without a toolbar.
 - Drag-to-reorder for test cases and bulk status update for users with
   `manage_test_cases`.
 - Test cases are copied when an issue is copied (status and actual result reset,
-  attachments and structured steps included).
+  attachments included).
 - Optional "Log test case changes as issue notes" setting, off by default.
 - REST API for create, update and delete, plus reorder and bulk update, with JSON
-  test cases including attachments and structured steps.
+  test cases including attachments.
 - Test coverage for permissions, multi-tracker settings, attachments, inline
-  images, copying, reordering, bulk update, change history, structured steps and
-  the API.
+  images, copying, reordering, bulk update, change history and the API.
 
 ### Fixed
 

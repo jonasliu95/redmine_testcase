@@ -81,15 +81,6 @@
       </div>
     <% end %>
 
-    <% if testcase.testcase_steps.any? %>
-      <div style="margin: 10px 0;">
-        <strong><%= l(:label_test_case_structured_steps) %>:</strong>
-        <div style="margin-left: 20px; margin-top: 5px;">
-          <%= render 'testcases/steps_table', testcase: testcase %>
-        </div>
-      </div>
-    <% end %>
-
     <% if testcase.expected_result.present? %>
       <div style="margin: 10px 0;">
         <strong><%= l(:label_test_case_expected) %>:</strong>
