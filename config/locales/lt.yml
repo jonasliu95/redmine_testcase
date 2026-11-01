@@ -72,3 +72,7 @@ lt:
 
   # Other
   text_generated_by: "Sukurta Redmine testcase įskiepio, autorius Jonas Liubinas"
+
+  # Reordering
+  text_drag_to_reorder: "Perkelkite testų atvejus už antraštės, kad pakeistumėte jų tvarką."
+  error_invalid_testcase_order: "Neteisinga testų atvejų tvarka."

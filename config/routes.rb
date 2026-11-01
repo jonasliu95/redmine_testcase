@@ -7,6 +7,7 @@ resources :issues do
     collection do
       get :export_csv
       get :print_view
+      patch :reorder
     end
   end
 end

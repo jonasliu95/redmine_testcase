@@ -6,7 +6,7 @@ class TestcasesController < ApplicationController
   before_action :find_issue
   before_action :find_testcase, only: [:show, :edit, :update, :destroy]
   before_action :authorize_view, only: [:index, :show, :export_csv, :print_view]
-  before_action :authorize_manage, only: [:new, :create, :edit, :update, :destroy]
+  before_action :authorize_manage, only: [:new, :create, :edit, :update, :destroy, :reorder]
   before_action :check_tracker_configured
 
   helper :issues
@@ -76,6 +76,27 @@ class TestcasesController < ApplicationController
     @testcase.destroy
     flash[:notice] = l(:notice_test_case_deleted)
     redirect_to issue_path(@issue, tab: 'testcases')
+  end
+
+  def reorder
+    ordered_ids = Array(params[:ordered_ids]).map(&:to_i).reject(&:zero?)
+    testcases = @issue.testcases.where(id: ordered_ids).to_a
+
+    if ordered_ids.empty? || testcases.size != ordered_ids.uniq.size
+      render json: {error: l(:error_invalid_testcase_order)}, status: :unprocessable_entity
+      return
+    end
+
+    Testcase.transaction do
+      ordered_ids.each_with_index do |id, index|
+        @issue.testcases.where(id: id).update_all(position: index + 1, updated_at: Time.current)
+      end
+    end
+
+    respond_to do |format|
+      format.html { redirect_to issue_path(@issue, tab: 'testcases') }
+      format.any { head :ok }
+    end
   end
 
   def export_csv

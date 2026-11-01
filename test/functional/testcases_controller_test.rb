@@ -209,7 +209,7 @@ class TestcasesControllerTest < ActionController::TestCase
 
     patch :reorder, params: {issue_id: @issue.id, ordered_ids: [third.id, first.id, second.id]}
 
-    assert_response :success
+    assert_redirected_to issue_path(@issue, tab: 'testcases')
     assert_equal [third.id, first.id, second.id], @issue.testcases.reorder(:position).pluck(:id)
     assert_equal [1, 2, 3], @issue.testcases.reorder(:position).pluck(:position)
   end
@@ -237,6 +237,51 @@ class TestcasesControllerTest < ActionController::TestCase
 
     assert_response :forbidden
     assert_equal [first.id, second.id], @issue.testcases.reorder(:position).pluck(:id)
+  end
+
+  def test_bulk_update_changes_only_test_cases_of_the_issue
+    first = Testcase.create!(valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_B1'))
+    second = Testcase.create!(valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_B2'))
+    other_issue = Issue.find(3)
+    other = Testcase.create!(valid_testcase_attributes.merge(issue: other_issue, test_case_id: 'TC_B3'))
+
+    post :bulk_update, params: {
+      issue_id: @issue.id,
+      ids: [first.id, second.id, other.id],
+      status: 'passed'
+    }
+
+    assert_redirected_to issue_path(@issue, tab: 'testcases')
+    assert_equal 'passed', first.reload.status
+    assert_equal 'passed', second.reload.status
+    assert_equal 'not_executed', other.reload.status
+  end
+
+  def test_bulk_update_rejects_invalid_status
+    testcase = Testcase.create!(valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_B4'))
+
+    post :bulk_update, params: {
+      issue_id: @issue.id,
+      ids: [testcase.id],
+      status: 'not_a_status'
+    }
+
+    assert_redirected_to issue_path(@issue, tab: 'testcases')
+    assert_equal 'not_executed', testcase.reload.status
+  end
+
+  def test_view_only_user_cannot_bulk_update
+    testcase = Testcase.create!(valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_B5'))
+    grant_view_only_permission
+
+    post :bulk_update, params: {
+      issue_id: @issue.id,
+      ids: [testcase.id],
+      status: 'passed'
+    }
+
+    assert_response :forbidden
+    assert_equal 'not_executed', testcase.reload.status
   end
 
   def test_view_only_user_cannot_update_test_case

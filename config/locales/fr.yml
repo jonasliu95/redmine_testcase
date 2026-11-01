@@ -72,3 +72,7 @@ fr:
 
   # Other
   text_generated_by: "Généré par le plugin Redmine testcase de Jonas Liubinas"
+
+  # Reordering
+  text_drag_to_reorder: "Drag test cases by their header to reorder them."
+  error_invalid_testcase_order: "Invalid test case order."

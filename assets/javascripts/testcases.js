@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initTestCases() {
+  initTestcaseSortable();
   // Add toggle functionality to test case items
   const testcaseHeaders = document.querySelectorAll('.testcase-header');
 
@@ -143,5 +144,39 @@ function searchTestCases(query) {
     } else {
       item.style.display = 'none';
     }
+  });
+}
+
+function initTestcaseSortable() {
+  if (typeof jQuery === 'undefined' || !jQuery.fn.sortable) {
+    return;
+  }
+
+  jQuery('.test-cases-list[data-reorder-url]').each(function() {
+    var list = jQuery(this);
+    if (list.data('sortableBound')) {
+      return;
+    }
+    list.data('sortableBound', true);
+    list.sortable({
+      items: '.testcase-item',
+      handle: '.testcase-header',
+      axis: 'y',
+      distance: 5,
+      update: function() {
+        var ids = list.children('.testcase-item').map(function() {
+          return jQuery(this).data('testcase-id');
+        }).get();
+        jQuery.ajax({
+          url: list.data('reorder-url'),
+          type: 'PATCH',
+          dataType: 'json',
+          data: {ordered_ids: ids},
+          error: function() {
+            window.location.reload();
+          }
+        });
+      }
+    });
   });
 }

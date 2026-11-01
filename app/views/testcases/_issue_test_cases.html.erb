@@ -45,7 +45,13 @@
     </div>
   </div>
 
-  <div class="test-cases-list">
+  <div class="testcases-list-controls">
+  <% if User.current.allowed_to?(:manage_test_cases, issue.project) %>
+    <p class="form-hint"><%= l(:text_drag_to_reorder) %></p>
+  <% end %>
+  </div>
+
+  <div class="test-cases-list"<% if User.current.allowed_to?(:manage_test_cases, issue.project) %> data-reorder-url="<%= reorder_issue_testcases_path(issue) %>"<% end %>>
     <%= render partial: 'testcases/testcase_item', collection: testcases, as: :testcase %>
   </div>
 <% else %>
