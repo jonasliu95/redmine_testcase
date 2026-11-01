@@ -2,16 +2,21 @@
   <h3><%= l(:label_testcase_settings) %></h3>
 
   <p>
-    <label for="settings_testcase_tracker_id"><%= l(:label_testcase_tracker) %></label>
-    <%= select_tag 'settings[testcase_tracker_id]',
-                   options_for_select(
-                     [[l(:text_no_tracker_selected), '']] +
-                     Tracker.all.map { |t| [t.name, t.id] },
-                     @settings['testcase_tracker_id']
-                   ) %>
+    <label><%= l(:label_testcase_trackers) %></label>
+    <%= hidden_field_tag 'settings[testcase_tracker_ids][]', '' %>
+    <span class="testcase-trackers">
+      <% Tracker.sorted.each do |tracker| %>
+        <label class="block">
+          <%= check_box_tag 'settings[testcase_tracker_ids][]', tracker.id,
+                            RedmineTestcase.tracker_ids.include?(tracker.id.to_s),
+                            id: nil %>
+          <%= tracker.name %>
+        </label>
+      <% end %>
+    </span>
   </p>
 
   <p class="form-hint">
-    <%= l(:text_select_testcase_tracker) %>
+    <%= l(:text_select_testcase_trackers) %>
   </p>
 </div>
