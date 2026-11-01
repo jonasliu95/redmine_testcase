@@ -9,6 +9,7 @@ class TestcasesController < ApplicationController
 
   helper :issues
   helper :testcases
+  helper :attachments
 
   def index
     @testcases = @issue.testcases.order(:position)
