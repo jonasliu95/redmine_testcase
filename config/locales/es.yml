@@ -81,3 +81,11 @@ es:
   label_bulk_status_update: "Bulk status update"
   notice_test_cases_bulk_updated: "%{count} test cases updated."
   error_invalid_testcase_status: "Invalid test case status."
+
+  # Change history (issue notes)
+  setting_log_changes_to_issue: "Log test case changes as issue notes"
+  text_log_changes_to_issue_hint: "Adds a note to the parent issue when a test case is created, changed or deleted. This sends notifications to issue watchers."
+  text_testcase_created_note: "Test case %{test_case_id} '%{title}' created."
+  text_testcase_deleted_note: "Test case %{test_case_id} '%{title}' deleted."
+  text_testcase_changed_note: "Test case %{test_case_id} '%{title}': %{changes}."
+  text_testcase_change: "%{field}: %{old} → %{new}"

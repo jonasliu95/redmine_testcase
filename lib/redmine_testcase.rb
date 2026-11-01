@@ -80,5 +80,10 @@ module RedmineTestcase
         "Configured tracker ID #{id} not found. Please reconfigure the plugin."
       end
     end
+
+    # Whether test case changes should be written to the parent issue journal.
+    def log_changes?
+      (Setting.plugin_redmine_testcase || {})['log_changes_to_issue'].to_s == '1'
+    end
   end
 end

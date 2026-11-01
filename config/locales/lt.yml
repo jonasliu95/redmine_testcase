@@ -81,3 +81,11 @@ lt:
   label_bulk_status_update: "Masinis būsenos keitimas"
   notice_test_cases_bulk_updated: "Atnaujinta testų atvejų: %{count}."
   error_invalid_testcase_status: "Neteisinga testų atvejo būsena."
+
+  # Change history (issue notes)
+  setting_log_changes_to_issue: "Registruoti testų atvejų pakeitimus užduoties komentaruose"
+  text_log_changes_to_issue_hint: "Prideda komentarą prie susijusios užduoties, kai testų atvejis sukuriamas, pakeičiamas arba ištrinamas. Tai siunčia pranešimus užduoties stebėtojams."
+  text_testcase_created_note: "Testų atvejis %{test_case_id} „%{title}“ sukurtas."
+  text_testcase_deleted_note: "Testų atvejis %{test_case_id} „%{title}“ ištrintas."
+  text_testcase_changed_note: "Testų atvejis %{test_case_id} „%{title}“: %{changes}."
+  text_testcase_change: "%{field}: %{old} → %{new}"

@@ -14,7 +14,8 @@ Redmine::Plugin.register :redmine_testcase do
   # Plugin settings (global, not project-specific)
   settings default: {
     'testcase_tracker_id' => nil,
-    'testcase_tracker_ids' => []
+    'testcase_tracker_ids' => [],
+    'log_changes_to_issue' => false
   }, partial: 'settings/testcase_settings'
 
   # Define project-scoped permissions under the test_cases project module

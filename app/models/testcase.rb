@@ -101,12 +101,95 @@ class Testcase < ApplicationRecord
   # Set position before create if not set
   before_create :set_default_position
 
+  # Optional issue journal notes (disabled by default because they send emails)
+  attr_accessor :skip_issue_journal
+
+  HISTORY_FIELDS = {
+    'test_case_id' => :label_test_case_id,
+    'title' => :label_test_case_title,
+    'preconditions' => :label_test_case_preconditions,
+    'steps' => :label_test_case_steps,
+    'expected_result' => :label_test_case_expected,
+    'actual_result' => :label_test_case_actual,
+    'status' => :label_test_case_status,
+    'comments' => :label_test_case_comments
+  }.freeze
+
+  after_create :add_created_note
+  after_update :add_updated_note
+  after_destroy :add_destroyed_note
+
   private
 
   def set_default_position
     if position.nil? || position.zero?
       max_position = issue.testcases.maximum(:position) || 0
       self.position = max_position + 1
+    end
+  end
+
+  def add_created_note
+    add_issue_note(
+      I18n.t(:text_testcase_created_note, test_case_id: test_case_id, title: title)
+    )
+  end
+
+  def add_updated_note
+    changes = saved_changes.slice(*HISTORY_FIELDS.keys)
+    return if changes.empty?
+
+    parts = changes.map do |field, (old_value, new_value)|
+      I18n.t(
+        :text_testcase_change,
+        field: I18n.t(HISTORY_FIELDS[field]),
+        old: history_value(field, old_value),
+        new: history_value(field, new_value)
+      )
+    end
+
+    add_issue_note(
+      I18n.t(
+        :text_testcase_changed_note,
+        test_case_id: test_case_id,
+        title: title,
+        changes: parts.join('; ')
+      )
+    )
+  end
+
+  def add_destroyed_note
+    add_issue_note(
+      I18n.t(:text_testcase_deleted_note, test_case_id: test_case_id, title: title)
+    )
+  end
+
+  def add_issue_note(notes)
+    return unless RedmineTestcase.log_changes?
+    return if skip_issue_journal
+    return unless User.current&.logged?
+
+    parent = Issue.find_by(id: issue_id)
+    return unless parent
+
+    parent.init_journal(User.current, notes)
+    unless parent.save
+      Rails.logger.error(
+        "[redmine_testcase] Could not add history note to issue ##{parent.id}: " \
+          "#{parent.errors.full_messages.join(', ')}"
+      )
+    end
+  rescue StandardError => e
+    details = e.message.to_s
+    Rails.logger.error(
+      "[redmine_testcase] Could not add history note to issue ##{issue_id}: #{e.class}: #{details}"
+    )
+  end
+
+  def history_value(field, value)
+    if field == 'status'
+      value.present? ? I18n.t("testcase_status_#{value}") : '-'
+    else
+      value.presence || '-'
     end
   end
 end
