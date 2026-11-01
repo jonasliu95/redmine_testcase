@@ -50,7 +50,7 @@ class TestcasesController < ApplicationController
       flash[:notice] = l(:notice_test_case_created)
       redirect_to issue_path(@issue, tab: 'testcases')
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -68,7 +68,7 @@ class TestcasesController < ApplicationController
       flash[:notice] = l(:notice_test_case_updated)
       redirect_to issue_path(@issue, tab: 'testcases')
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 

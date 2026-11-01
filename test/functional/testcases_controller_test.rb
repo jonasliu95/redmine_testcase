@@ -80,6 +80,32 @@ class TestcasesControllerTest < ActionController::TestCase
     assert testcases.first.association(:attachments).loaded?
   end
 
+  def test_create_with_invalid_test_case_returns_unprocessable_entity
+    post :create, params: {
+      issue_id: @issue.id,
+      testcase: {test_case_id: 'TC_INVALID', title: '', status: 'not_executed'}
+    }
+
+    assert_response :unprocessable_entity
+  end
+
+  def test_update_with_invalid_test_case_returns_unprocessable_entity
+    testcase = Testcase.create!(
+      issue: @issue,
+      test_case_id: 'TC_INVALID',
+      title: 'Valid title',
+      status: 'not_executed'
+    )
+
+    patch :update, params: {
+      issue_id: @issue.id,
+      id: testcase.id,
+      testcase: {title: ''}
+    }
+
+    assert_response :unprocessable_entity
+  end
+
   def test_user_with_permission_in_project_can_view_test_cases
     Role.find(1).add_permission!(:view_test_cases)
     @request.session[:user_id] = 2
