@@ -17,7 +17,7 @@ class TestcaseAttachmentsTest < Redmine::IntegrationTest
     )
     @attachment = Attachment.create!(
       container: @testcase,
-      file: uploaded_test_file('testfile.txt', 'text/plain'),
+      file: qa_png,
       author_id: 1
     )
     Setting.plugin_redmine_testcase = {'testcase_tracker_id' => @issue.tracker_id.to_s}
@@ -43,5 +43,58 @@ class TestcaseAttachmentsTest < Redmine::IntegrationTest
     get "/attachments/testcases/#{@testcase.id}/download"
 
     assert_response :success
+  end
+
+  def test_index_renders_textile_inline_attachment_image
+    @testcase.update!(steps: '!qa.png!')
+    log_user('admin', 'admin')
+
+    with_text_formatting('textile') do
+      get "/issues/#{@issue.id}/testcases"
+    end
+
+    assert_response :success
+    assert_match(/<img[^>]+src="[^"]*qa\.png/, response.body)
+  end
+
+  def test_print_view_renders_textile_inline_attachment_image
+    @testcase.update!(steps: '!qa.png!')
+    log_user('admin', 'admin')
+
+    with_text_formatting('textile') do
+      get "/issues/#{@issue.id}/testcases/print_view"
+    end
+
+    assert_response :success
+    assert_match(/<img[^>]+src="[^"]*qa\.png/, response.body)
+  end
+
+  def test_index_renders_common_mark_inline_attachment_image
+    @testcase.update!(steps: '![](qa.png)')
+    log_user('admin', 'admin')
+
+    with_text_formatting('common_mark') do
+      get "/issues/#{@issue.id}/testcases"
+    end
+
+    assert_response :success
+    assert_match(/<img[^>]+src="[^"]*qa\.png/, response.body)
+  end
+
+  private
+
+  def with_text_formatting(format)
+    original = Setting.text_formatting
+    Setting.text_formatting = format
+    yield
+  ensure
+    Setting.text_formatting = original
+  end
+
+  def qa_png
+    Rack::Test::UploadedFile.new(
+      File.expand_path('../fixtures/files/qa.png', __dir__),
+      'image/png'
+    )
   end
 end

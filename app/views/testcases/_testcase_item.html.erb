@@ -25,35 +25,35 @@
     <% if testcase.preconditions.present? %>
       <div class="testcase-field">
         <strong><%= l(:label_test_case_preconditions) %>:</strong>
-        <%= format_testcase_field(testcase.preconditions) %>
+        <%= format_testcase_field(testcase.preconditions, testcase) %>
       </div>
     <% end %>
 
     <% if testcase.steps.present? %>
       <div class="testcase-field">
         <strong><%= l(:label_test_case_steps) %>:</strong>
-        <%= format_testcase_field(testcase.steps) %>
+        <%= format_testcase_field(testcase.steps, testcase) %>
       </div>
     <% end %>
 
     <% if testcase.expected_result.present? %>
       <div class="testcase-field">
         <strong><%= l(:label_test_case_expected) %>:</strong>
-        <%= format_testcase_field(testcase.expected_result) %>
+        <%= format_testcase_field(testcase.expected_result, testcase) %>
       </div>
     <% end %>
 
     <% if testcase.actual_result.present? %>
       <div class="testcase-field">
         <strong><%= l(:label_test_case_actual) %>:</strong>
-        <%= format_testcase_field(testcase.actual_result) %>
+        <%= format_testcase_field(testcase.actual_result, testcase) %>
       </div>
     <% end %>
 
     <% if testcase.comments.present? %>
       <div class="testcase-field">
         <strong><%= l(:label_test_case_comments) %>:</strong>
-        <%= format_testcase_field(testcase.comments) %>
+        <%= format_testcase_field(testcase.comments, testcase) %>
       </div>
     <% end %>
 

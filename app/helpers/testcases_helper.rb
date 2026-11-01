@@ -11,9 +11,9 @@ module TestcasesHelper
                 { class: 'form-control' }
   end
 
-  def format_testcase_field(text)
+  def format_testcase_field(text, testcase = nil)
     return '' if text.blank?
-    simple_format(h(text))
+    textilizable(text, object: testcase, attachments: testcase&.attachments)
   end
 
   def testcase_summary_widget(summary)

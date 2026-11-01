@@ -67,7 +67,7 @@
       <div style="margin: 10px 0;">
         <strong><%= l(:label_test_case_preconditions) %>:</strong>
         <div style="margin-left: 20px; margin-top: 5px;">
-          <%= format_testcase_field(testcase.preconditions) %>
+          <%= format_testcase_field(testcase.preconditions, testcase) %>
         </div>
       </div>
     <% end %>
@@ -76,7 +76,7 @@
       <div style="margin: 10px 0;">
         <strong><%= l(:label_test_case_steps) %>:</strong>
         <div style="margin-left: 20px; margin-top: 5px;">
-          <%= format_testcase_field(testcase.steps) %>
+          <%= format_testcase_field(testcase.steps, testcase) %>
         </div>
       </div>
     <% end %>
@@ -85,7 +85,7 @@
       <div style="margin: 10px 0;">
         <strong><%= l(:label_test_case_expected) %>:</strong>
         <div style="margin-left: 20px; margin-top: 5px;">
-          <%= format_testcase_field(testcase.expected_result) %>
+          <%= format_testcase_field(testcase.expected_result, testcase) %>
         </div>
       </div>
     <% end %>
@@ -94,7 +94,7 @@
       <div style="margin: 10px 0;">
         <strong><%= l(:label_test_case_actual) %>:</strong>
         <div style="margin-left: 20px; margin-top: 5px;">
-          <%= format_testcase_field(testcase.actual_result) %>
+          <%= format_testcase_field(testcase.actual_result, testcase) %>
         </div>
       </div>
     <% end %>
@@ -103,7 +103,7 @@
       <div style="margin: 10px 0;">
         <strong><%= l(:label_test_case_comments) %>:</strong>
         <div style="margin-left: 20px; margin-top: 5px;">
-          <%= format_testcase_field(testcase.comments) %>
+          <%= format_testcase_field(testcase.comments, testcase) %>
         </div>
       </div>
     <% end %>
