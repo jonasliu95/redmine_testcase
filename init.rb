@@ -9,6 +9,7 @@ Redmine::Plugin.register :redmine_testcase do
   version '0.1.0'
   url 'https://github.com/jonasliu95/redmine_testcase'
   author_url 'https://github.com/jonasliu95'
+  requires_redmine version_or_higher: '6.0.0'
 
   # Plugin settings (global, not project-specific)
   settings default: {
@@ -27,6 +28,12 @@ end
 
 # Load hooks
 require_relative 'lib/redmine_testcase/hooks/view_issues_hook'
+
+# Register Testcase as an attachable object type so the core attachments routes
+# (/attachments/testcases/:id/edit and /download) and attachments/_form work.
+# Plugin initializers run inside a to_prepare callback, after core plugins have
+# mixed Redmine::Acts::Attachable into ApplicationRecord.
+Redmine::Plugin.find(:redmine_testcase).attachment_object_type(Testcase)
 
 issue_patch = proc do
   require_dependency 'issue'

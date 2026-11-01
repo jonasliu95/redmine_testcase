@@ -3,6 +3,7 @@ class Testcase < ApplicationRecord
 
   # Attachments support
   acts_as_attachable view_permission: :view_test_cases,
+                     edit_permission: :manage_test_cases,
                      delete_permission: :manage_test_cases
 
   # Status enumeration - defined first so validations can use it
@@ -51,6 +52,11 @@ class Testcase < ApplicationRecord
   # Required by acts_as_attachable for permission checks
   def project
     issue&.project
+  end
+
+  # Required by the core attachments controller when Testcase is used as a container.
+  def visible?(user = User.current)
+    issue.present? && issue.visible?(user) && user.allowed_to?(:view_test_cases, project)
   end
 
   # Status color coding for UI
