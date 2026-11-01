@@ -115,6 +115,43 @@ class TestcasesControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  def test_view_only_user_cannot_create_test_case
+    grant_view_only_permission
+    testcase = valid_testcase_attributes
+
+    assert_no_difference 'Testcase.count' do
+      post :create, params: {issue_id: @issue.id, testcase: testcase}
+    end
+
+    assert_response :forbidden
+  end
+
+  def test_view_only_user_cannot_update_test_case
+    grant_view_only_permission
+    testcase = Testcase.create!(valid_testcase_attributes.merge(issue: @issue, title: 'Original title'))
+
+    patch :update, params: {
+      issue_id: @issue.id,
+      id: testcase.id,
+      testcase: {title: 'Changed title'}
+    }
+
+    assert_response :forbidden
+    assert_equal 'Original title', testcase.reload.title
+  end
+
+  def test_view_only_user_cannot_delete_test_case
+    grant_view_only_permission
+    testcase = Testcase.create!(valid_testcase_attributes.merge(issue: @issue))
+
+    assert_no_difference 'Testcase.count' do
+      delete :destroy, params: {issue_id: @issue.id, id: testcase.id}
+    end
+
+    assert_response :forbidden
+    assert Testcase.exists?(testcase.id)
+  end
+
   def test_user_with_permission_in_another_project_cannot_view_private_issue_test_cases
     Role.find(1).add_permission!(:view_test_cases, :manage_test_cases)
     private_issue = create_private_project_issue
@@ -136,6 +173,15 @@ class TestcasesControllerTest < ActionController::TestCase
   end
 
   private
+
+  def grant_view_only_permission
+    Role.find(1).add_permission!(:view_test_cases)
+    @request.session[:user_id] = 2
+  end
+
+  def valid_testcase_attributes
+    {test_case_id: 'TC_PERM', title: 'Permission test case', status: 'not_executed'}
+  end
 
   def create_private_project_issue
     project = Project.create!(
