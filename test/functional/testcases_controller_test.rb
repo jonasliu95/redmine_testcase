@@ -37,6 +37,25 @@ class TestcasesControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  def test_index_preloads_attachments
+    testcase = Testcase.create!(
+      issue: @issue,
+      test_case_id: 'TC_PRELOAD',
+      title: 'Test case with attachment',
+      status: 'not_executed'
+    )
+    Attachment.create!(
+      container: testcase,
+      file: uploaded_test_file('testfile.txt', 'text/plain'),
+      author_id: @admin.id
+    )
+
+    get :index, params: {issue_id: @issue.id}
+
+    testcases = @controller.instance_variable_get(:@testcases)
+    assert testcases.first.association(:attachments).loaded?
+  end
+
   def test_user_with_permission_in_project_can_view_test_cases
     Role.find(1).add_permission!(:view_test_cases)
     @request.session[:user_id] = 2

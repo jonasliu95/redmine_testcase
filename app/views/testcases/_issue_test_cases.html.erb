@@ -1,16 +1,6 @@
 <%
-  testcases = issue.testcases.order(:position)
-  summary = {
-    total: testcases.count,
-    by_status: {}
-  }
-
-  Testcase.status_values.each do |status|
-    summary[:by_status][status] = testcases.where(status: status).count
-  end
-
-  passed_count = summary[:by_status]['passed'] || 0
-  summary[:pass_rate] = summary[:total] > 0 ? (passed_count.to_f / summary[:total] * 100).round(1) : 0
+  testcases = issue.testcases.includes(:attachments, :issue).order(:position)
+  summary = Testcase.summary(issue.testcases)
 %>
 
 <div class="contextual">

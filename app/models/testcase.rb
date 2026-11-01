@@ -45,6 +45,19 @@ class Testcase < ApplicationRecord
     end
   end
 
+  # Single grouped query summary used by the controller and views.
+  def self.summary(scope = all)
+    counts = scope.reorder(nil).group(:status).count
+    total = counts.values.sum
+    by_status = status_values.index_with { |status| counts[status] || 0 }
+
+    {
+      total: total,
+      by_status: by_status,
+      pass_rate: total > 0 ? (by_status['passed'].to_f / total * 100).round(1) : 0
+    }
+  end
+
   def status_label
     I18n.t("testcase_status_#{status}")
   end

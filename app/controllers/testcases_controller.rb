@@ -12,8 +12,8 @@ class TestcasesController < ApplicationController
   helper :attachments
 
   def index
-    @testcases = @issue.testcases.order(:position)
-    @summary = calculate_summary(@testcases)
+    @testcases = @issue.testcases.includes(:attachments, :issue).order(:position)
+    @summary = Testcase.summary(@issue.testcases)
 
     respond_to do |format|
       format.html
@@ -87,8 +87,8 @@ class TestcasesController < ApplicationController
   end
 
   def print_view
-    @testcases = @issue.testcases.order(:position)
-    @summary = calculate_summary(@testcases)
+    @testcases = @issue.testcases.includes(:attachments, :issue).order(:position)
+    @summary = Testcase.summary(@issue.testcases)
 
     render layout: 'base'
   end
@@ -143,24 +143,6 @@ class TestcasesController < ApplicationController
       :comments,
       :position
     )
-  end
-
-  def calculate_summary(testcases)
-    summary = {
-      total: testcases.count,
-      by_status: {}
-    }
-
-    Testcase.status_values.each do |status|
-      count = testcases.where(status: status).count
-      summary[:by_status][status] = count
-    end
-
-    passed_count = summary[:by_status]['passed'] || 0
-    total = summary[:total]
-    summary[:pass_rate] = total > 0 ? (passed_count.to_f / total * 100).round(1) : 0
-
-    summary
   end
 
   def generate_csv(testcases)

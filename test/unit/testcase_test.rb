@@ -118,4 +118,34 @@ class TestcaseTest < ActiveSupport::TestCase
     testcases = @issue.testcases.to_a
     assert_equal [tc1, tc2, tc3], testcases
   end
+
+  def test_should_summarize_statuses
+    Testcase.create!(issue: @issue, test_case_id: 'TC_SUM_1', title: 'Passed', status: 'passed')
+    Testcase.create!(issue: @issue, test_case_id: 'TC_SUM_2', title: 'Passed again', status: 'passed')
+    Testcase.create!(issue: @issue, test_case_id: 'TC_SUM_3', title: 'Failed', status: 'failed')
+
+    summary = Testcase.summary(@issue.testcases)
+
+    assert_equal 3, summary[:total]
+    assert_equal 2, summary[:by_status]['passed']
+    assert_equal 1, summary[:by_status]['failed']
+    assert_equal 0, summary[:by_status]['blocked']
+    assert_equal 66.7, summary[:pass_rate]
+  end
+
+  def test_should_summarize_statuses_with_one_query
+    Testcase.create!(issue: @issue, test_case_id: 'TC_SUM_4', title: 'Passed', status: 'passed')
+
+    queries = []
+    callback = lambda do |*args|
+      payload = args.last
+      queries << payload[:sql] unless payload[:name] == 'SCHEMA'
+    end
+
+    ActiveSupport::Notifications.subscribed(callback, 'sql.active_record') do
+      Testcase.summary(@issue.testcases)
+    end
+
+    assert_equal 1, queries.size
+  end
 end
