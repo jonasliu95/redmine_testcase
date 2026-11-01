@@ -8,8 +8,7 @@
                      [[l(:text_no_tracker_selected), '']] +
                      Tracker.all.map { |t| [t.name, t.id] },
                      @settings['testcase_tracker_id']
-                   ),
-                   class: 'select2' %>
+                   ) %>
   </p>
 
   <p class="form-hint">

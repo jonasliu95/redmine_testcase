@@ -1,6 +1,4 @@
-class Testcase < ActiveRecord::Base
-  include Redmine::Acts::Attachable
-
+class Testcase < ApplicationRecord
   belongs_to :issue
 
   # Attachments support
