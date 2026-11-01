@@ -35,6 +35,44 @@ module RedmineTestcase
       tracker_ids.include?(issue.tracker_id.to_s)
     end
 
+    # Copy all test cases (and their attachments) from source_issue to
+    # target_issue. Used when Redmine copies an issue.
+    def copy_testcases_from(source_issue, target_issue)
+      return unless source_issue && target_issue
+      return unless enabled_for_issue?(target_issue)
+
+      source_issue.testcases.includes(:attachments).each do |source|
+        copy = source.dup
+        copy.assign_attributes(
+          issue_id: target_issue.id,
+          status: 'not_executed',
+          actual_result: nil,
+          position: source.position,
+          created_at: nil,
+          updated_at: nil
+        )
+        copy.skip_issue_journal = true if copy.respond_to?(:skip_issue_journal=)
+
+        unless copy.save
+          log_copy_error(target_issue, source, copy.errors.full_messages)
+          next
+        end
+
+        copy.attachments = source.attachments.map { |attachment| attachment.copy(container: copy) }
+      end
+    rescue StandardError => e
+      details = e.message.to_s
+      Rails.logger.error(
+        "[redmine_testcase] Could not copy test cases to issue ##{target_issue&.id}: #{e.class}: #{details}"
+      )
+    end
+
+    def log_copy_error(target_issue, source, messages)
+      Rails.logger.error(
+        "[redmine_testcase] Could not copy test case ##{source.id} to issue ##{target_issue.id}: #{messages.join(', ')}"
+      )
+    end
+
     # Validate settings
     def validate_settings
       missing = tracker_ids.reject { |id| Tracker.exists?(id: id) }

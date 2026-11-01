@@ -44,6 +44,10 @@ issue_patch = proc do
   unless Issue.included_modules.include?(RedmineTestcase::Patches::IssuePatch)
     Issue.include RedmineTestcase::Patches::IssuePatch
   end
+
+  unless Issue.ancestors.include?(RedmineTestcase::Patches::IssueCopyPatch)
+    Issue.prepend RedmineTestcase::Patches::IssueCopyPatch
+  end
 end
 
 # Apply immediately so the association is present even before the first reload

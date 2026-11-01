@@ -202,6 +202,43 @@ class TestcasesControllerTest < ActionController::TestCase
     assert_response :forbidden
   end
 
+  def test_reorder_updates_positions_in_the_given_order
+    first = Testcase.create!(valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_R1', position: 1))
+    second = Testcase.create!(valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_R2', position: 2))
+    third = Testcase.create!(valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_R3', position: 3))
+
+    patch :reorder, params: {issue_id: @issue.id, ordered_ids: [third.id, first.id, second.id]}
+
+    assert_response :success
+    assert_equal [third.id, first.id, second.id], @issue.testcases.reorder(:position).pluck(:id)
+    assert_equal [1, 2, 3], @issue.testcases.reorder(:position).pluck(:position)
+  end
+
+  def test_reorder_rejects_test_cases_from_another_issue
+    testcase = Testcase.create!(valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_R4', position: 1))
+    other_issue = Issue.find(3)
+    other_testcase = Testcase.create!(
+      valid_testcase_attributes.merge(issue: other_issue, test_case_id: 'TC_R5', position: 1)
+    )
+
+    patch :reorder, params: {issue_id: @issue.id, ordered_ids: [testcase.id, other_testcase.id]}
+
+    assert_response :unprocessable_entity
+    assert_equal 1, testcase.reload.position
+    assert_equal 1, other_testcase.reload.position
+  end
+
+  def test_view_only_user_cannot_reorder
+    first = Testcase.create!(valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_R6', position: 1))
+    second = Testcase.create!(valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_R7', position: 2))
+    grant_view_only_permission
+
+    patch :reorder, params: {issue_id: @issue.id, ordered_ids: [second.id, first.id]}
+
+    assert_response :forbidden
+    assert_equal [first.id, second.id], @issue.testcases.reorder(:position).pluck(:id)
+  end
+
   def test_view_only_user_cannot_update_test_case
     grant_view_only_permission
     testcase = Testcase.create!(valid_testcase_attributes.merge(issue: @issue, title: 'Original title'))
