@@ -61,6 +61,31 @@ class TestcasesControllerTest < ActionController::TestCase
     assert_equal "'@SUM(A1:A2)", row[9]
   end
 
+  def test_new_form_has_wiki_toolbars_and_attachment_drop_target
+    get :new, params: {issue_id: @issue.id}
+
+    assert_response :success
+    %w[testcase_preconditions testcase_steps testcase_expected_result testcase_actual_result testcase_comments].each do |field_id|
+      assert_match(/id="#{field_id}"/, response.body)
+      assert_match(/new jsToolBar\(document.getElementById\('#{field_id}'\)\)/, response.body)
+    end
+    assert_match(/attachments\[dummy\]\[file\]/, response.body)
+    assert_match(/class="[^"]*filedrop/, response.body)
+  end
+
+  def test_edit_form_has_wiki_toolbars_and_attachment_drop_target
+    testcase = Testcase.create!(valid_testcase_attributes.merge(issue: @issue))
+
+    get :edit, params: {issue_id: @issue.id, id: testcase.id}
+
+    assert_response :success
+    %w[testcase_preconditions testcase_steps testcase_expected_result testcase_actual_result testcase_comments].each do |field_id|
+      assert_match(/new jsToolBar\(document.getElementById\('#{field_id}'\)\)/, response.body)
+    end
+    assert_match(/attachments\[dummy\]\[file\]/, response.body)
+    assert_match(/class="[^"]*filedrop/, response.body)
+  end
+
   def test_index_preloads_attachments
     testcase = Testcase.create!(
       issue: @issue,

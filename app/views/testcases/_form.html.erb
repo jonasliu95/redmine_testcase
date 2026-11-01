@@ -24,30 +24,35 @@
     <p>
       <%= f.label :preconditions, l(:label_test_case_preconditions) %>
       <%= f.text_area :preconditions, rows: 5, class: 'wiki-edit', maxlength: 10000 %>
+      <%= wikitoolbar_for 'testcase_preconditions' %>
       <em class="info"><%= l(:text_length_between, min: 0, max: 10000) rescue 'Max 10,000 characters' %></em>
     </p>
 
     <p>
       <%= f.label :steps, l(:label_test_case_steps) %>
       <%= f.text_area :steps, rows: 8, class: 'wiki-edit', maxlength: 10000 %>
+      <%= wikitoolbar_for 'testcase_steps' %>
       <em class="info"><%= l(:text_length_between, min: 0, max: 10000) rescue 'Max 10,000 characters' %></em>
     </p>
 
     <p>
       <%= f.label :expected_result, l(:label_test_case_expected) %>
       <%= f.text_area :expected_result, rows: 5, class: 'wiki-edit', maxlength: 10000 %>
+      <%= wikitoolbar_for 'testcase_expected_result' %>
       <em class="info"><%= l(:text_length_between, min: 0, max: 10000) rescue 'Max 10,000 characters' %></em>
     </p>
 
     <p>
       <%= f.label :actual_result, l(:label_test_case_actual) %>
       <%= f.text_area :actual_result, rows: 5, class: 'wiki-edit', maxlength: 10000 %>
+      <%= wikitoolbar_for 'testcase_actual_result' %>
       <em class="info"><%= l(:text_length_between, min: 0, max: 10000) rescue 'Max 10,000 characters' %></em>
     </p>
 
     <p>
       <%= f.label :comments, l(:label_test_case_comments) %>
       <%= f.text_area :comments, rows: 4, class: 'wiki-edit', maxlength: 10000 %>
+      <%= wikitoolbar_for 'testcase_comments' %>
       <em class="info"><%= l(:text_length_between, min: 0, max: 10000) rescue 'Max 10,000 characters' %></em>
     </p>
 
