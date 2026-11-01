@@ -352,6 +352,66 @@ class TestcasesControllerTest < ActionController::TestCase
     assert_equal 'not_executed', testcase.reload.status
   end
 
+  def test_bulk_update_adds_one_history_note_with_only_changed_test_cases
+    enable_history
+    changed_from_not_executed = Testcase.create!(
+      valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_H_A', status: 'not_executed')
+    )
+    changed_from_passed = Testcase.create!(
+      valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_H_B', status: 'passed')
+    )
+    already_blocked = Testcase.create!(
+      valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_H_C', status: 'blocked')
+    )
+    journal_count = issue_journal_count
+
+    assert_difference 'issue_journal_count', 1 do
+      post :bulk_update, params: {
+        issue_id: @issue.id,
+        ids: [changed_from_not_executed.id, changed_from_passed.id, already_blocked.id],
+        status: 'blocked'
+      }
+    end
+
+    note = @issue.journals.reorder(:id).last.notes
+    assert_match(/TC_H_A/, note)
+    assert_match(/TC_H_B/, note)
+    assert_no_match(/TC_H_C/, note)
+    assert_match(/Blocked/, note)
+    assert_equal 1, issue_journal_count - journal_count
+  end
+
+  def test_bulk_update_adds_no_history_note_when_disabled
+    Setting.plugin_redmine_testcase = {
+      'testcase_tracker_id' => @issue.tracker_id.to_s,
+      'log_changes_to_issue' => '0'
+    }
+    testcase = Testcase.create!(valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_H_D'))
+
+    assert_no_difference 'issue_journal_count' do
+      post :bulk_update, params: {
+        issue_id: @issue.id,
+        ids: [testcase.id],
+        status: 'passed'
+      }
+    end
+  end
+
+  def test_bulk_update_adds_no_history_note_when_nothing_changed
+    enable_history
+    testcase = Testcase.create!(
+      valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_H_E', status: 'passed')
+    )
+
+    assert_no_difference 'issue_journal_count' do
+      post :bulk_update, params: {
+        issue_id: @issue.id,
+        ids: [testcase.id],
+        status: 'passed'
+      }
+    end
+  end
+
   def test_view_only_user_cannot_bulk_update
     testcase = Testcase.create!(valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_B5'))
     grant_view_only_permission
@@ -421,6 +481,17 @@ class TestcasesControllerTest < ActionController::TestCase
 
   def valid_testcase_attributes
     {test_case_id: 'TC_PERM', title: 'Permission test case', status: 'not_executed'}
+  end
+
+  def enable_history
+    Setting.plugin_redmine_testcase = {
+      'testcase_tracker_id' => @issue.tracker_id.to_s,
+      'log_changes_to_issue' => '1'
+    }
+  end
+
+  def issue_journal_count
+    Journal.where(journalized_id: @issue.id, journalized_type: 'Issue').count
   end
 
   def qa_png

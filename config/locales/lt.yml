@@ -99,3 +99,4 @@ lt:
   label_test_case_step_actual: "Faktinis rezultatas"
   button_add_step: "Pridėti žingsnį"
   button_remove_step: "Pašalinti"
+  text_testcases_bulk_status_note: "Testų atvejai %{test_cases}: būsena → %{status}"

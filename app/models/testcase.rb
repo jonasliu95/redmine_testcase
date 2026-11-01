@@ -175,34 +175,10 @@ class Testcase < ApplicationRecord
   end
 
   def add_issue_note(notes)
-    return unless RedmineTestcase.log_changes?
     return if skip_issue_journal
     return if destroyed_by_association
-    return unless User.current&.logged?
 
-    parent = Issue.find_by(id: issue_id)
-    return unless parent
-
-    parent.init_journal(User.current, notes)
-    unless parent.save
-      Rails.logger.error(
-        "[redmine_testcase] Could not add history note to issue ##{parent.id}: " \
-          "#{parent.errors.full_messages.join(', ')}"
-      )
-    end
-  rescue StandardError => e
-    details = e.message.to_s
-    Rails.logger.error(
-      "[redmine_testcase] Could not add history note to issue ##{issue_id}: #{e.class}: #{details}"
-    )
-  end
-
-  def history_value(field, value)
-    if field == 'status'
-      value.present? ? I18n.t("testcase_status_#{value}") : '-'
-    else
-      value.presence || '-'
-    end
+    RedmineTestcase.add_note_to_issue(issue_id, notes)
   end
 
   def history_values_equal?(field, old_value, new_value)
@@ -215,5 +191,13 @@ class Testcase < ApplicationRecord
 
   def normalize_history_text(value)
     value.to_s.gsub(/\r\n?/, "\n")
+  end
+
+  def history_value(field, value)
+    if field == 'status'
+      value.present? ? I18n.t("testcase_status_#{value}") : '-'
+    else
+      value.presence || '-'
+    end
   end
 end

@@ -150,7 +150,18 @@ class TestcasesController < ApplicationController
       return
     end
 
-    updated = @issue.testcases.where(id: ids).update_all(status: status, updated_at: Time.current)
+    scope = @issue.testcases.where(id: ids)
+    changed = scope.where.not(status: status).to_a
+    updated = scope.update_all(status: status, updated_at: Time.current)
+
+    if changed.any?
+      note = I18n.t(
+        :text_testcases_bulk_status_note,
+        test_cases: changed.map(&:test_case_id).join(', '),
+        status: I18n.t("testcase_status_#{status}")
+      )
+      RedmineTestcase.add_note_to_issue(@issue.id, note)
+    end
 
     respond_to do |format|
       format.html do

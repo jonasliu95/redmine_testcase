@@ -99,3 +99,4 @@ fr:
   label_test_case_step_actual: "Actual result"
   button_add_step: "Add step"
   button_remove_step: "Remove"
+  text_testcases_bulk_status_note: "Test cases %{test_cases}: status → %{status}"

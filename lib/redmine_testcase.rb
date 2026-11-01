@@ -97,5 +97,31 @@ module RedmineTestcase
     def log_changes?
       (Setting.plugin_redmine_testcase || {})['log_changes_to_issue'].to_s == '1'
     end
+
+    # Add a note to an issue journal as the current user. Used by test case
+    # callbacks and by the controller for bulk updates (which skip callbacks).
+    def add_note_to_issue(issue_id, notes)
+      return false unless log_changes?
+      return false unless User.current&.logged?
+
+      parent = Issue.find_by(id: issue_id)
+      return false unless parent
+
+      parent.init_journal(User.current, notes)
+      unless parent.save
+        Rails.logger.error(
+          "[redmine_testcase] Could not add history note to issue ##{parent.id}: " \
+            "#{parent.errors.full_messages.join(', ')}"
+        )
+        return false
+      end
+      true
+    rescue StandardError => e
+      details = e.message.to_s
+      Rails.logger.error(
+        "[redmine_testcase] Could not add history note to issue ##{issue_id}: #{e.class}: #{details}"
+      )
+      false
+    end
   end
 end
