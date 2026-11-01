@@ -1,6 +1,8 @@
 require 'csv'
 
 class TestcasesController < ApplicationController
+  accept_api_auth :index, :show
+
   before_action :find_issue
   before_action :find_testcase, only: [:show, :edit, :update, :destroy]
   before_action :authorize_view, only: [:index, :show, :export_csv, :print_view]
@@ -23,7 +25,7 @@ class TestcasesController < ApplicationController
 
   def show
     respond_to do |format|
-      format.html
+      format.html { redirect_to issue_path(@issue, tab: 'testcases') }
       format.json { render json: @testcase }
     end
   end
