@@ -1,3 +1,8 @@
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'testcases', plugin: 'redmine_testcase' %>
+  <%= javascript_include_tag 'testcases', plugin: 'redmine_testcase' %>
+<% end %>
+
 <%= form_for @testcase,
              url: @testcase.new_record? ? issue_testcases_path(@issue) : issue_testcase_path(@issue, @testcase),
              html: { class: 'tabular', multipart: true } do |f| %>

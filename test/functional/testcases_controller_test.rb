@@ -170,6 +170,8 @@ class TestcasesControllerTest < ActionController::TestCase
     assert_match(/class="[^"]*filedrop/, response.body)
     assert_match(/id="testcase-steps-table"/, response.body)
     assert_match(/id="add-testcase-step"/, response.body)
+    assert_match(/testcases-[0-9a-f]+\.js/, response.body)
+    assert_match(/testcases-[0-9a-f]+\.css/, response.body)
   end
 
   def test_edit_form_has_wiki_toolbars_and_attachment_drop_target
@@ -183,6 +185,8 @@ class TestcasesControllerTest < ActionController::TestCase
     end
     assert_match(/attachments\[dummy\]\[file\]/, response.body)
     assert_match(/class="[^"]*filedrop/, response.body)
+    assert_match(/testcases-[0-9a-f]+\.js/, response.body)
+    assert_match(/testcases-[0-9a-f]+\.css/, response.body)
   end
 
   def test_index_preloads_attachments
