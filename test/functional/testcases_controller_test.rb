@@ -310,6 +310,17 @@ class TestcasesControllerTest < ActionController::TestCase
     assert_equal 1, other_testcase.reload.position
   end
 
+  def test_reorder_requires_the_full_set_of_test_cases
+    first = Testcase.create!(valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_R8', position: 1))
+    second = Testcase.create!(valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_R9', position: 2))
+
+    patch :reorder, params: {issue_id: @issue.id, ordered_ids: [first.id]}
+
+    assert_response :unprocessable_entity
+    assert_equal [first.id, second.id], @issue.testcases.reorder(:position).pluck(:id)
+    assert_equal [1, 2], @issue.testcases.reorder(:position).pluck(:position)
+  end
+
   def test_view_only_user_cannot_reorder
     first = Testcase.create!(valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_R6', position: 1))
     second = Testcase.create!(valid_testcase_attributes.merge(issue: @issue, test_case_id: 'TC_R7', position: 2))

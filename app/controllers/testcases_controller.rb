@@ -114,9 +114,11 @@ class TestcasesController < ApplicationController
 
   def reorder
     ordered_ids = Array(params[:ordered_ids]).map(&:to_i).reject(&:zero?)
-    testcases = @issue.testcases.where(id: ordered_ids).to_a
+    issue_ids = @issue.testcases.pluck(:id)
 
-    if ordered_ids.empty? || testcases.size != ordered_ids.uniq.size
+    if ordered_ids.empty? ||
+       ordered_ids.uniq.size != ordered_ids.size ||
+       ordered_ids.sort != issue_ids.sort
       render json: {error: l(:error_invalid_testcase_order)}, status: :unprocessable_entity
       return
     end
