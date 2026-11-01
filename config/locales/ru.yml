@@ -76,3 +76,8 @@ ru:
   # Reordering
   text_drag_to_reorder: "Drag test cases by their header to reorder them."
   error_invalid_testcase_order: "Invalid test case order."
+
+  # Bulk update
+  label_bulk_status_update: "Bulk status update"
+  notice_test_cases_bulk_updated: "%{count} test cases updated."
+  error_invalid_testcase_status: "Invalid test case status."

@@ -51,6 +51,20 @@
   <% end %>
   </div>
 
+  <% if User.current.allowed_to?(:manage_test_cases, issue.project) %>
+    <div class="testcase-controls testcase-bulk-controls">
+      <%= form_tag bulk_update_issue_testcases_path(issue), method: :post, id: 'testcase-bulk-update-form' do %>
+        <div class="control-group">
+          <label for="testcase-bulk-status"><%= l(:label_bulk_status_update) %>:</label>
+          <%= select_tag 'status', options_for_select(Testcase.status_options), id: 'testcase-bulk-status' %>
+        </div>
+        <div class="button-group">
+          <%= submit_tag l(:button_apply) %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
   <div class="test-cases-list"<% if User.current.allowed_to?(:manage_test_cases, issue.project) %> data-reorder-url="<%= reorder_issue_testcases_path(issue) %>"<% end %>>
     <%= render partial: 'testcases/testcase_item', collection: testcases, as: :testcase %>
   </div>

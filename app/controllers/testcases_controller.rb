@@ -6,7 +6,7 @@ class TestcasesController < ApplicationController
   before_action :find_issue
   before_action :find_testcase, only: [:show, :edit, :update, :destroy]
   before_action :authorize_view, only: [:index, :show, :export_csv, :print_view]
-  before_action :authorize_manage, only: [:new, :create, :edit, :update, :destroy, :reorder]
+  before_action :authorize_manage, only: [:new, :create, :edit, :update, :destroy, :reorder, :bulk_update]
   before_action :check_tracker_configured
 
   helper :issues
@@ -96,6 +96,34 @@ class TestcasesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to issue_path(@issue, tab: 'testcases') }
       format.any { head :ok }
+    end
+  end
+
+  def bulk_update
+    ids = Array(params[:ids]).map(&:to_i).reject(&:zero?)
+    status = params[:status].to_s
+
+    unless Testcase.status_values.include?(status)
+      respond_to do |format|
+        format.html do
+          flash[:error] = l(:error_invalid_testcase_status)
+          redirect_to issue_path(@issue, tab: 'testcases')
+        end
+        format.json do
+          render json: {error: l(:error_invalid_testcase_status)}, status: :unprocessable_entity
+        end
+      end
+      return
+    end
+
+    updated = @issue.testcases.where(id: ids).update_all(status: status, updated_at: Time.current)
+
+    respond_to do |format|
+      format.html do
+        flash[:notice] = l(:notice_test_cases_bulk_updated, count: updated)
+        redirect_to issue_path(@issue, tab: 'testcases')
+      end
+      format.json { render json: {updated: updated} }
     end
   end
 

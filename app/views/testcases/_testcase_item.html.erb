@@ -1,5 +1,11 @@
 <div class="testcase-item" data-testcase-id="<%= testcase.id %>">
   <div class="testcase-header">
+    <% if User.current.allowed_to?(:manage_test_cases, testcase.project) %>
+      <%= check_box_tag 'ids[]', testcase.id, false,
+                        id: "testcase-select-#{testcase.id}",
+                        class: 'testcase-select',
+                        form: 'testcase-bulk-update-form' %>
+    <% end %>
     <span class="testcase-id"><strong><%= testcase.test_case_id %></strong></span>
     <span class="testcase-title"><%= testcase.title %></span>
     <%= testcase_status_badge(testcase) %>

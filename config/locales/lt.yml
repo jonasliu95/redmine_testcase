@@ -76,3 +76,8 @@ lt:
   # Reordering
   text_drag_to_reorder: "Perkelkite testų atvejus už antraštės, kad pakeistumėte jų tvarką."
   error_invalid_testcase_order: "Neteisinga testų atvejų tvarka."
+
+  # Bulk update
+  label_bulk_status_update: "Masinis būsenos keitimas"
+  notice_test_cases_bulk_updated: "Atnaujinta testų atvejų: %{count}."
+  error_invalid_testcase_status: "Neteisinga testų atvejo būsena."

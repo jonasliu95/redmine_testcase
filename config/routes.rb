@@ -8,6 +8,7 @@ resources :issues do
       get :export_csv
       get :print_view
       patch :reorder
+      post :bulk_update
     end
   end
 end
