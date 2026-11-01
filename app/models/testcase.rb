@@ -175,6 +175,7 @@ class Testcase < ApplicationRecord
   def add_issue_note(notes)
     return unless RedmineTestcase.log_changes?
     return if skip_issue_journal
+    return if destroyed_by_association
     return unless User.current&.logged?
 
     parent = Issue.find_by(id: issue_id)
