@@ -1,7 +1,7 @@
 require 'csv'
 
 class TestcasesController < ApplicationController
-  accept_api_auth :index, :show
+  accept_api_auth :index, :show, :create, :update, :destroy, :reorder, :bulk_update
 
   before_action :find_issue
   before_action :find_testcase, only: [:show, :edit, :update, :destroy]
@@ -19,14 +19,14 @@ class TestcasesController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: @testcases }
+      format.json { render json: @testcases.map { |testcase| testcase_json(testcase) } }
     end
   end
 
   def show
     respond_to do |format|
       format.html { redirect_to issue_path(@issue, tab: 'testcases') }
-      format.json { render json: @testcase }
+      format.json { render json: testcase_json(@testcase) }
     end
   end
 
@@ -46,11 +46,24 @@ class TestcasesController < ApplicationController
     @testcase.save_attachments(params[:attachments] || (params[:testcase] && params[:testcase][:uploads]))
 
     if @testcase.save
-      render_attachment_warning_if_needed(@testcase)
-      flash[:notice] = l(:notice_test_case_created)
-      redirect_to issue_path(@issue, tab: 'testcases')
+      respond_to do |format|
+        format.html do
+          render_attachment_warning_if_needed(@testcase)
+          flash[:notice] = l(:notice_test_case_created)
+          redirect_to issue_path(@issue, tab: 'testcases')
+        end
+        format.json do
+          @testcase.attachments.reload
+          render json: testcase_json(@testcase), status: :created
+        end
+      end
     else
-      render :new, status: :unprocessable_entity
+      respond_to do |format|
+        format.html { render :new, status: :unprocessable_entity }
+        format.json do
+          render json: {errors: @testcase.errors.full_messages}, status: :unprocessable_entity
+        end
+      end
     end
   end
 
@@ -64,18 +77,36 @@ class TestcasesController < ApplicationController
     @testcase.save_attachments(params[:attachments] || (params[:testcase] && params[:testcase][:uploads]))
 
     if @testcase.save
-      render_attachment_warning_if_needed(@testcase)
-      flash[:notice] = l(:notice_test_case_updated)
-      redirect_to issue_path(@issue, tab: 'testcases')
+      respond_to do |format|
+        format.html do
+          render_attachment_warning_if_needed(@testcase)
+          flash[:notice] = l(:notice_test_case_updated)
+          redirect_to issue_path(@issue, tab: 'testcases')
+        end
+        format.json do
+          @testcase.attachments.reload
+          render json: testcase_json(@testcase)
+        end
+      end
     else
-      render :edit, status: :unprocessable_entity
+      respond_to do |format|
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json do
+          render json: {errors: @testcase.errors.full_messages}, status: :unprocessable_entity
+        end
+      end
     end
   end
 
   def destroy
     @testcase.destroy
-    flash[:notice] = l(:notice_test_case_deleted)
-    redirect_to issue_path(@issue, tab: 'testcases')
+    respond_to do |format|
+      format.html do
+        flash[:notice] = l(:notice_test_case_deleted)
+        redirect_to issue_path(@issue, tab: 'testcases')
+      end
+      format.json { head :no_content }
+    end
   end
 
   def reorder
@@ -191,6 +222,31 @@ class TestcasesController < ApplicationController
       :comments,
       :position
     )
+  end
+
+  def testcase_json(testcase)
+    {
+      id: testcase.id,
+      issue_id: testcase.issue_id,
+      test_case_id: testcase.test_case_id,
+      title: testcase.title,
+      preconditions: testcase.preconditions,
+      steps: testcase.steps,
+      expected_result: testcase.expected_result,
+      actual_result: testcase.actual_result,
+      status: testcase.status,
+      comments: testcase.comments,
+      position: testcase.position,
+      created_on: testcase.created_at,
+      updated_on: testcase.updated_at,
+      attachments: testcase.attachments.map do |attachment|
+        {
+          id: attachment.id,
+          filename: attachment.filename,
+          content_url: download_named_attachment_path(attachment, attachment.filename)
+        }
+      end
+    }
   end
 
   def generate_csv(testcases)

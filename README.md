@@ -74,6 +74,58 @@ A Redmine plugin for managing manual test cases within issues.
 6. Use **Print View** to generate a printer-friendly report
    ![HTML Friendly Print](img/html_friendly_print.png)
 
+## REST API
+
+Every endpoint is scoped to an issue. The `test_cases` project module must be
+enabled for the issue's project and the user needs `view_test_cases` (read) or
+`manage_test_cases` (write). Authenticate with an API key header or HTTP basic
+auth; JSON endpoints skip session authentication.
+
+| Method | Path | Permission |
+|--------|------|------------|
+| GET | `/issues/:issue_id/testcases.json` | view_test_cases |
+| GET | `/issues/:issue_id/testcases/:id.json` | view_test_cases |
+| POST | `/issues/:issue_id/testcases.json` | manage_test_cases |
+| PATCH/PUT | `/issues/:issue_id/testcases/:id.json` | manage_test_cases |
+| DELETE | `/issues/:issue_id/testcases/:id.json` | manage_test_cases |
+| PATCH | `/issues/:issue_id/testcases/reorder.json` | manage_test_cases |
+| POST | `/issues/:issue_id/testcases/bulk_update.json` | manage_test_cases |
+
+```bash
+# List
+curl -H 'X-Redmine-API-Key: YOUR_KEY' \
+  'http://redmine/issues/1/testcases.json'
+
+# Show
+curl -u admin:YOUR_PASSWORD 'http://redmine/issues/1/testcases/4.json'
+
+# Create (201 with the test case)
+curl -u admin:YOUR_PASSWORD -H 'Content-Type: application/json' \
+  -X POST 'http://redmine/issues/1/testcases.json' \
+  -d '{"testcase":{"test_case_id":"TC_001","title":"Login","status":"not_executed"}}'
+
+# Update (200 with the test case)
+curl -u admin:YOUR_PASSWORD -H 'Content-Type: application/json' \
+  -X PATCH 'http://redmine/issues/1/testcases/4.json' \
+  -d '{"testcase":{"status":"passed"}}'
+
+# Delete (204)
+curl -u admin:YOUR_PASSWORD -X DELETE 'http://redmine/issues/1/testcases/4.json'
+
+# Reorder (200)
+curl -u admin:YOUR_PASSWORD -H 'Content-Type: application/json' \
+  -X PATCH 'http://redmine/issues/1/testcases/reorder.json' \
+  -d '{"ordered_ids":[4,2,3]}'
+
+# Bulk status update (200, {"updated":2})
+curl -u admin:YOUR_PASSWORD -H 'Content-Type: application/json' \
+  -X POST 'http://redmine/issues/1/testcases/bulk_update.json' \
+  -d '{"ids":[4,2],"status":"passed"}'
+```
+
+Validation failures return `422` with `{"errors": ["..."]}`; missing
+permission returns `403`.
+
 ## Test Case Statuses
 
 - Not Executed / Not Run
