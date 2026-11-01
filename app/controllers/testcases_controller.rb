@@ -148,20 +148,23 @@ class TestcasesController < ApplicationController
   end
 
   def generate_csv(testcases)
-    CSV.generate(headers: true) do |csv|
+    Redmine::Export::CSV.generate(
+      encoding: params[:encoding],
+      field_separator: params[:field_separator]
+    ) do |csv|
       # CSV headers
       csv << [
-        'Issue ID',
-        'Issue Subject',
-        'Test Case ID',
-        'Title',
-        'Preconditions',
-        'Test Steps',
-        'Expected Result',
-        'Actual Result',
-        'Status',
-        'Comments',
-        'Updated At'
+        l(:field_issue),
+        l(:field_subject),
+        l(:label_test_case_id),
+        l(:label_test_case_title),
+        l(:label_test_case_preconditions),
+        l(:label_test_case_steps),
+        l(:label_test_case_expected),
+        l(:label_test_case_actual),
+        l(:label_test_case_status),
+        l(:label_test_case_comments),
+        l(:label_last_updated)
       ]
 
       # CSV rows
@@ -178,9 +181,16 @@ class TestcasesController < ApplicationController
           tc.status_label,
           tc.comments,
           tc.updated_at.strftime('%Y-%m-%d %H:%M:%S')
-        ]
+        ].map { |value| csv_safe(value) }
       end
     end
+  end
+
+  # Prevent spreadsheet formula injection when a cell starts with =, +, - or @.
+  def csv_safe(value)
+    return value unless value.is_a?(String)
+
+    value.match?(/\A[=+\-@]/) ? "'#{value}" : value
   end
 
 end

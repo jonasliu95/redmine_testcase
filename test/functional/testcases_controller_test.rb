@@ -37,6 +37,30 @@ class TestcasesControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  def test_export_csv_uses_redmine_csv_helpers_and_sanitizes_formulas
+    Testcase.create!(
+      issue: @issue,
+      test_case_id: 'TC_CSV',
+      title: '=HYPERLINK("http://example.com")',
+      status: 'not_executed',
+      steps: '+cmd',
+      comments: '@SUM(A1:A2)'
+    )
+
+    get :export_csv, params: {issue_id: @issue.id, encoding: 'UTF-8', field_separator: ';'}
+
+    assert_response :success
+    body = response.body.dup.force_encoding('UTF-8').sub("\xEF\xBB\xBF", '')
+    rows = CSV.parse(body, col_sep: ';')
+    assert_equal ['Issue', 'Subject', 'Test Case ID', 'Title', 'Preconditions', 'Test Steps',
+                  'Expected Result', 'Actual Result', 'Status', 'Comments', 'Last Updated'],
+                 rows.first
+    row = rows.last
+    assert_equal %q{'=HYPERLINK("http://example.com")}, row[3]
+    assert_equal "'+cmd", row[5]
+    assert_equal "'@SUM(A1:A2)", row[9]
+  end
+
   def test_index_preloads_attachments
     testcase = Testcase.create!(
       issue: @issue,
