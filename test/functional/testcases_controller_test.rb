@@ -101,6 +101,35 @@ class TestcasesControllerTest < ActionController::TestCase
     assert_equal [1, 2], testcase.testcase_steps.map(&:position)
   end
 
+  # The browser JS names new rows with a large numeric key (timestamp + counter).
+  # Rails strong parameters drop non-numeric keys, so they must stay digits only.
+  def test_update_adds_structured_steps_with_browser_style_keys
+    testcase = Testcase.create!(valid_testcase_attributes.merge(issue: @issue))
+    step = TestcaseStep.create!(testcase: testcase, action: 'Existing step')
+
+    assert_difference 'TestcaseStep.count', 2 do
+      patch :update, params: {
+        issue_id: @issue.id,
+        id: testcase.id,
+        testcase: {
+          testcase_steps_attributes: {
+            '0' => {id: step.id, action: 'Existing step', status: 'not_executed', _destroy: '0'},
+            '17935649865671' => {action: 'New step A', status: 'not_executed', _destroy: '0'},
+            '17935649865682' => {action: 'New step B', expected_result: 'B shows', status: 'not_executed', _destroy: '0'}
+          }
+        }
+      }
+    end
+
+    assert_equal ['Existing step', 'New step A', 'New step B'], testcase.reload.testcase_steps.map(&:action)
+  end
+
+  def test_step_row_javascript_generates_digit_only_keys
+    script = File.read(File.expand_path('../../../assets/javascripts/testcases.js', __FILE__))
+    assert_no_match(/'new_'/, script)
+    assert_match(/Date\.now\(\)\) \+ String\(testcaseStepRowCounter\)/, script)
+  end
+
   def test_update_structured_steps
     testcase = Testcase.create!(valid_testcase_attributes.merge(issue: @issue))
     step = TestcaseStep.create!(testcase: testcase, action: 'Old action')

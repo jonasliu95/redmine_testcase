@@ -184,6 +184,8 @@ function initTestcaseSortable() {
 }
 
 
+var testcaseStepRowCounter = 0;
+
 function initTestcaseStepRows() {
   var body = document.getElementById('testcase-steps-body');
   var template = document.getElementById('testcase-step-template');
@@ -221,7 +223,10 @@ function initTestcaseStepRows() {
     addButton.dataset.bound = 'true';
     addButton.addEventListener('click', function(e) {
       e.preventDefault();
-      var index = 'new_' + Date.now();
+      // Rails strong parameters only keep numeric keys for nested attributes
+      // hashes, so a new row key must be digits only (and unique per click).
+      testcaseStepRowCounter += 1;
+      var index = String(Date.now()) + String(testcaseStepRowCounter);
       var html = template.innerHTML.replace(/NEW_RECORD/g, index);
       var wrapper = document.createElement('tbody');
       wrapper.innerHTML = html;
