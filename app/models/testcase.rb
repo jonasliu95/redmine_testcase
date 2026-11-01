@@ -144,7 +144,9 @@ class Testcase < ApplicationRecord
   end
 
   def add_updated_note
-    changes = saved_changes.slice(*HISTORY_FIELDS.keys)
+    changes = saved_changes.slice(*HISTORY_FIELDS.keys).reject do |field, (old_value, new_value)|
+      history_values_equal?(field, old_value, new_value)
+    end
     return if changes.empty?
 
     parts = changes.map do |field, (old_value, new_value)|
@@ -201,5 +203,17 @@ class Testcase < ApplicationRecord
     else
       value.presence || '-'
     end
+  end
+
+  def history_values_equal?(field, old_value, new_value)
+    return old_value.to_s == new_value.to_s if field == 'status'
+
+    old_text = normalize_history_text(old_value)
+    new_text = normalize_history_text(new_value)
+    old_text == new_text || (old_text.blank? && new_text.blank?)
+  end
+
+  def normalize_history_text(value)
+    value.to_s.gsub(/\r\n?/, "\n")
   end
 end

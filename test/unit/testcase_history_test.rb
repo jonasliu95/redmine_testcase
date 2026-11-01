@@ -97,6 +97,53 @@ class TestcaseHistoryTest < ActiveSupport::TestCase
     Setting.notified_events = original_notified_events
   end
 
+  def test_update_from_nil_to_blank_does_not_add_a_note
+    enable_history
+    testcase = Testcase.create!(
+      issue: @issue,
+      test_case_id: 'TC_H7',
+      title: 'History',
+      status: 'not_executed',
+      comments: nil
+    )
+
+    assert_no_difference 'Journal.where(journalized_id: @issue.id, journalized_type: "Issue").count' do
+      testcase.update!(comments: '')
+    end
+  end
+
+  def test_update_with_only_line_ending_changes_does_not_add_a_note
+    enable_history
+    testcase = Testcase.create!(
+      issue: @issue,
+      test_case_id: 'TC_H8',
+      title: 'History',
+      status: 'not_executed',
+      comments: "line one\r\nline two"
+    )
+
+    assert_no_difference 'Journal.where(journalized_id: @issue.id, journalized_type: "Issue").count' do
+      testcase.update!(comments: "line one\nline two")
+    end
+  end
+
+  def test_update_from_blank_to_text_adds_a_note
+    enable_history
+    testcase = Testcase.create!(
+      issue: @issue,
+      test_case_id: 'TC_H9',
+      title: 'History',
+      status: 'not_executed',
+      comments: ''
+    )
+
+    assert_difference 'Journal.where(journalized_id: @issue.id, journalized_type: "Issue").count', 1 do
+      testcase.update!(comments: 'A real comment')
+    end
+
+    assert_match(/A real comment/, @issue.journals.reorder(:id).last.notes)
+  end
+
   private
 
   def enable_history
