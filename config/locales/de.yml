@@ -1,6 +1,6 @@
 de:
   # Plugin name and description
-  project_module_testcase: "Testfälle"
+  project_module_test_cases: "Testfälle"
 
   # Permissions
   permission_view_test_cases: "Testfälle anzeigen"

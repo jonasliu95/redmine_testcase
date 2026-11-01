@@ -98,6 +98,7 @@ class TestcasesController < ApplicationController
   def find_issue
     @issue = Issue.find(params[:issue_id])
     @project = @issue.project
+    render_404 unless @issue.visible?
   rescue ActiveRecord::RecordNotFound
     render_404
   end
@@ -109,17 +110,11 @@ class TestcasesController < ApplicationController
   end
 
   def authorize_view
-    # Global permission check - no project context needed
-    unless User.current.allowed_to_globally?(:view_test_cases)
-      render_403
-    end
+    render_403 unless User.current.allowed_to?(:view_test_cases, @project)
   end
 
   def authorize_manage
-    # Global permission check - no project context needed
-    unless User.current.allowed_to_globally?(:manage_test_cases)
-      render_403
-    end
+    render_403 unless User.current.allowed_to?(:manage_test_cases, @project)
   end
 
   def check_tracker_configured

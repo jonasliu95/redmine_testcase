@@ -14,7 +14,7 @@
 %>
 
 <div class="contextual">
-  <% if User.current.allowed_to_globally?(:manage_test_cases) %>
+  <% if User.current.allowed_to?(:manage_test_cases, issue.project) %>
     <%= link_to l(:button_add_test_case),
                 new_issue_testcase_path(issue),
                 class: 'icon icon-add' %>

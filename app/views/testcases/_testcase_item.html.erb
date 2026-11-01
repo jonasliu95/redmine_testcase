@@ -6,7 +6,7 @@
     <span class="testcase-updated"><%= l(:label_last_updated) %>: <%= format_time(testcase.updated_at) %></span>
 
     <div class="testcase-actions">
-      <% if User.current.allowed_to_globally?(:manage_test_cases) %>
+      <% if User.current.allowed_to?(:manage_test_cases, testcase.project) %>
         <%= link_to l(:button_edit),
                     edit_issue_testcase_path(testcase.issue, testcase),
                     class: 'testcase-action-button',

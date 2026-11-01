@@ -1,6 +1,6 @@
 ja:
   # Plugin name and description
-  project_module_testcase: "テストケース"
+  project_module_test_cases: "テストケース"
 
   # Permissions
   permission_view_test_cases: "テストケースの表示"

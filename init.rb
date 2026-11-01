@@ -16,14 +16,16 @@ Redmine::Plugin.register :redmine_testcase do
     'testcase_tracker_id' => nil
   }, partial: 'settings/testcase_settings'
 
-  # Define global permissions (not project-module)
-  permission :view_test_cases, {
-    testcases: [:index, :show, :export_csv, :print_view]
-  }, public: false
+  # Define project-scoped permissions under the test_cases project module
+  project_module :test_cases do
+    permission :view_test_cases, {
+      testcases: [:index, :show, :export_csv, :print_view]
+    }, public: false
 
-  permission :manage_test_cases, {
-    testcases: [:index, :show, :new, :create, :edit, :update, :destroy, :export_csv, :print_view]
-  }, require: :loggedin
+    permission :manage_test_cases, {
+      testcases: [:index, :show, :new, :create, :edit, :update, :destroy, :export_csv, :print_view]
+    }, public: false
+  end
 end
 
 # Load hooks

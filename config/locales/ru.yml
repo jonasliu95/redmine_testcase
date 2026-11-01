@@ -1,6 +1,6 @@
 ru:
   # Plugin name and description
-  project_module_testcase: "Тест-кейсы"
+  project_module_test_cases: "Тест-кейсы"
 
   # Permissions
   permission_view_test_cases: "Просмотр тест-кейсов"

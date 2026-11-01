@@ -1,6 +1,6 @@
 lt:
   # Plugin name and description
-  project_module_testcase: "Testų atvejai"
+  project_module_test_cases: "Testų atvejai"
 
   # Permissions
   permission_view_test_cases: "Peržiūrėti testų atvejus"

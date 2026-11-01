@@ -3,7 +3,7 @@
   testcase_tracker_id = Setting.plugin_redmine_testcase['testcase_tracker_id']
   return if testcase_tracker_id.blank?
   return unless issue.tracker_id.to_s == testcase_tracker_id.to_s
-  return unless User.current.allowed_to_globally?(:view_test_cases)
+  return unless User.current.allowed_to?(:view_test_cases, issue.project)
 
   # Count test cases for this issue
   testcase_count = issue.testcases.count

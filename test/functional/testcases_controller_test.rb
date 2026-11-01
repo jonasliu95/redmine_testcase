@@ -36,4 +36,52 @@ class TestcasesControllerTest < ActionController::TestCase
 
     assert_response :success
   end
+
+  def test_user_with_permission_in_project_can_view_test_cases
+    Role.find(1).add_permission!(:view_test_cases)
+    @request.session[:user_id] = 2
+
+    get :index, params: {issue_id: @issue.id}
+
+    assert_response :success
+  end
+
+  def test_user_with_permission_in_another_project_cannot_view_private_issue_test_cases
+    Role.find(1).add_permission!(:view_test_cases, :manage_test_cases)
+    private_issue = create_private_project_issue
+    @request.session[:user_id] = 2
+
+    get :index, params: {issue_id: private_issue.id}
+
+    assert_response :not_found
+  end
+
+  def test_user_with_permission_in_another_project_cannot_manage_private_issue_test_cases
+    Role.find(1).add_permission!(:view_test_cases, :manage_test_cases)
+    private_issue = create_private_project_issue
+    @request.session[:user_id] = 2
+
+    get :new, params: {issue_id: private_issue.id}
+
+    assert_response :not_found
+  end
+
+  private
+
+  def create_private_project_issue
+    project = Project.create!(
+      name: 'Private project',
+      identifier: 'private-project',
+      is_public: false
+    )
+    project.enabled_module_names = ['issue_tracking', 'test_cases']
+    Issue.create!(
+      project: project,
+      tracker: @issue.tracker,
+      subject: 'Private issue',
+      author: @admin,
+      status: IssueStatus.find(1),
+      priority: IssuePriority.find(5)
+    )
+  end
 end

@@ -11,8 +11,8 @@ module RedmineTestcase
         return '' if testcase_tracker_id.blank?
         return '' unless issue.tracker_id.to_s == testcase_tracker_id.to_s
 
-        # Check global permissions
-        return '' unless User.current.allowed_to_globally?(:view_test_cases)
+        # Check project-scoped permissions
+        return '' unless User.current.allowed_to?(:view_test_cases, issue.project)
 
         # Render test cases section
         context[:controller].send(:render_to_string, {
