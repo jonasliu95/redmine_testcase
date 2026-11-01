@@ -288,3 +288,11 @@ p.nodata {
 }
 
 /* Form attachments */
+
+/* Inline images in test case fields */
+.testcase-field img,
+.testcase-print-item img,
+.testcase-steps-table img {
+  max-width: 100%;
+  height: auto;
+}
