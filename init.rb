@@ -24,7 +24,7 @@ Redmine::Plugin.register :redmine_testcase do
 
     permission :manage_test_cases, {
       testcases: [:index, :show, :new, :create, :edit, :update, :destroy, :export_csv, :print_view]
-    }, public: false
+    }, public: false, require: :loggedin
   end
 end
 
