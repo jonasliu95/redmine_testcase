@@ -126,6 +126,36 @@ class TestcasesControllerTest < ActionController::TestCase
     assert_response :forbidden
   end
 
+  def test_legacy_single_tracker_setting_allows_issue
+    Setting.plugin_redmine_testcase = {'testcase_tracker_id' => @issue.tracker_id.to_s}
+
+    get :index, params: {issue_id: @issue.id}
+
+    assert_response :success
+  end
+
+  def test_multiple_tracker_settings_allow_each_tracker
+    issue_with_tracker_2 = Issue.find(2)
+    Setting.plugin_redmine_testcase = {
+      'testcase_tracker_ids' => [@issue.tracker_id.to_s, issue_with_tracker_2.tracker_id.to_s]
+    }
+
+    get :index, params: {issue_id: @issue.id}
+    assert_response :success
+
+    get :index, params: {issue_id: issue_with_tracker_2.id}
+    assert_response :success
+  end
+
+  def test_issue_on_non_selected_tracker_is_forbidden
+    Setting.plugin_redmine_testcase = {'testcase_tracker_ids' => [@issue.tracker_id.to_s]}
+    issue_with_other_tracker = Issue.find(2)
+
+    get :index, params: {issue_id: issue_with_other_tracker.id}
+
+    assert_response :forbidden
+  end
+
   def test_view_only_user_cannot_update_test_case
     grant_view_only_permission
     testcase = Testcase.create!(valid_testcase_attributes.merge(issue: @issue, title: 'Original title'))
