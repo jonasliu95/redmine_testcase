@@ -100,3 +100,5 @@ ja:
   button_add_step: "Add step"
   button_remove_step: "Remove"
   text_testcases_bulk_status_note: "Test cases %{test_cases}: status → %{status}"
+  text_testcase_module_disabled_projects: "The \"Test cases\" project module is not enabled in these projects, so test cases are hidden there. Enable it under Project settings → Modules:"
+  text_testcase_module_more_projects: "and %{count} more"

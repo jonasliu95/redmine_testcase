@@ -20,6 +20,21 @@
     <%= l(:text_select_testcase_trackers) %>
   </p>
 
+  <% missing = RedmineTestcase.projects_without_module.to_a %>
+  <% if RedmineTestcase.tracker_configured? && missing.any? %>
+    <div class="flash warning testcase-module-warning">
+      <%= l(:text_testcase_module_disabled_projects) %>
+      <ul>
+        <% missing.first(20).each do |project| %>
+          <li><%= link_to project.name, settings_project_path(project, tab: 'modules') %></li>
+        <% end %>
+      </ul>
+      <% if missing.size > 20 %>
+        <%= l(:text_testcase_module_more_projects, count: missing.size - 20) %>
+      <% end %>
+    </div>
+  <% end %>
+
   <p>
     <label for="settings_log_changes_to_issue"><%= l(:setting_log_changes_to_issue) %></label>
     <%= hidden_field_tag 'settings[log_changes_to_issue]', '0' %>

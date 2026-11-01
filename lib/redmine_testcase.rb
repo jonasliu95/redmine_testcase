@@ -93,6 +93,16 @@ module RedmineTestcase
       end
     end
 
+    # Active projects that allow at least one of the enabled trackers but have
+    # not enabled the "Test cases" project module, so the feature stays hidden.
+    def projects_without_module
+      return Project.none unless tracker_configured?
+
+      with_module = EnabledModule.where(name: 'test_cases').select(:project_id)
+      with_tracker = Project.joins(:trackers).where(trackers: {id: tracker_ids}).select('projects.id')
+      Project.active.where(id: with_tracker).where.not(id: with_module).sorted
+    end
+
     # Whether test case changes should be written to the parent issue journal.
     def log_changes?
       (Setting.plugin_redmine_testcase || {})['log_changes_to_issue'].to_s == '1'

@@ -100,3 +100,5 @@ lt:
   button_add_step: "Pridėti žingsnį"
   button_remove_step: "Pašalinti"
   text_testcases_bulk_status_note: "Testų atvejai %{test_cases}: būsena → %{status}"
+  text_testcase_module_disabled_projects: "Šiuose projektuose neįjungtas modulis \"Testų atvejai\", todėl testų atvejai ten nerodomi. Įjunkite jį projekto nustatymuose → Moduliai:"
+  text_testcase_module_more_projects: "ir dar %{count}"
