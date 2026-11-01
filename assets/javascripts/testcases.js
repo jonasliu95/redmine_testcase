@@ -27,8 +27,8 @@ function initTestCases() {
 
     // Add click event
     header.addEventListener('click', function(e) {
-      // Don't toggle if clicking on action buttons
-      if (e.target.closest('.testcase-actions')) {
+      // Don't toggle when clicking on controls (checkbox, links, buttons...)
+      if (e.target.closest('.testcase-actions, input, label, a, button, select, textarea')) {
         return;
       }
 
@@ -162,6 +162,7 @@ function initTestcaseSortable() {
     list.sortable({
       items: '.testcase-item',
       handle: '.testcase-header',
+      cancel: 'input, label, a, button, select, textarea, option',
       axis: 'y',
       distance: 5,
       update: function() {
