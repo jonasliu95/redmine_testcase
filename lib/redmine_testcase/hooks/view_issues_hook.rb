@@ -20,10 +20,6 @@ module RedmineTestcase
           locals: { issue: issue }
         })
       end
-
-      # Add tab link to issue tabs
-      render_on :view_issues_show_description_bottom,
-                partial: 'testcases/issue_tab_link'
     end
   end
 end
