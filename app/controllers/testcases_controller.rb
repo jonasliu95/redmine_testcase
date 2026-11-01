@@ -120,16 +120,13 @@ class TestcasesController < ApplicationController
   end
 
   def check_tracker_configured
-    testcase_tracker_id = Setting.plugin_redmine_testcase['testcase_tracker_id']
+    return if RedmineTestcase.enabled_for_issue?(@issue)
 
-    if testcase_tracker_id.blank?
+    if RedmineTestcase.tracker_configured?
+      render_403
+    else
       flash[:error] = l(:text_no_tracker_selected)
       redirect_to issue_path(@issue)
-      return false
-    end
-
-    unless @issue.tracker_id.to_s == testcase_tracker_id.to_s
-      render_403
     end
   end
 

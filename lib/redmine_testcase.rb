@@ -2,44 +2,45 @@ module RedmineTestcase
   # Plugin configuration and utilities
 
   class << self
-    # Check if a tracker is configured for test cases
+    # Trackers enabled for test cases.
+    #
+    # The plural setting takes precedence whenever its key is present, even
+    # when it is empty: that is how an admin disables all trackers. Legacy
+    # installs only have testcase_tracker_id, so fall back to it.
+    def tracker_ids
+      settings = Setting.plugin_redmine_testcase || {}
+      ids =
+        if settings.key?('testcase_tracker_ids')
+          Array(settings['testcase_tracker_ids'])
+        else
+          [settings['testcase_tracker_id']]
+        end
+
+      ids.map { |id| id.to_s.strip }.reject(&:blank?).uniq
+    end
+
     def tracker_configured?
-      tracker_id.present?
+      tracker_ids.any?
     end
 
-    # Get the configured tracker ID
-    def tracker_id
-      Setting.plugin_redmine_testcase['testcase_tracker_id']
-    end
-
-    # Get the configured tracker object
-    def tracker
-      return nil unless tracker_configured?
-      begin
-        Tracker.find(tracker_id)
-      rescue ActiveRecord::RecordNotFound
-        nil
-      end
+    # Get the configured tracker objects
+    def trackers
+      Tracker.where(id: tracker_ids).sorted
     end
 
     # Check if an issue should have test cases enabled
     def enabled_for_issue?(issue)
-      return false unless tracker_configured?
       return false unless issue
-      issue.tracker_id.to_s == tracker_id.to_s
+
+      tracker_ids.include?(issue.tracker_id.to_s)
     end
 
     # Validate settings
     def validate_settings
-      errors = []
-
-      if tracker_configured?
-        unless tracker
-          errors << "Configured tracker ID #{tracker_id} not found. Please reconfigure the plugin."
-        end
+      missing = tracker_ids.reject { |id| Tracker.exists?(id: id) }
+      missing.map do |id|
+        "Configured tracker ID #{id} not found. Please reconfigure the plugin."
       end
-
-      errors
     end
   end
 end
