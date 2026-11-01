@@ -7,9 +7,9 @@ es:
   permission_manage_test_cases: "Gestionar casos de prueba"
 
   # Settings
-  label_testcase_tracker: "Tipo de petición de caso de prueba"
+  label_testcase_trackers: "Test Case Trackers"
   label_testcase_settings: "Configuración de casos de prueba"
-  text_select_testcase_tracker: "Seleccione el tipo de petición que habilitará la gestión de casos de prueba"
+  text_select_testcase_trackers: "Select the trackers that enable test cases. Leave all unchecked to disable the feature."
   text_no_tracker_selected: "Ningún tipo de petición seleccionado - funcionalidad de casos de prueba deshabilitada"
 
   # Test Cases tab and general labels

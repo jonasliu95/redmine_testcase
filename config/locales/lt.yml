@@ -7,9 +7,9 @@ lt:
   permission_manage_test_cases: "Valdyti testų atvejus"
 
   # Settings
-  label_testcase_tracker: "Testų atvejų sekiklis"
+  label_testcase_trackers: "Testų atvejų sekikliai"
   label_testcase_settings: "Testų atvejų nustatymai"
-  text_select_testcase_tracker: "Pasirinkite sekiklį, kuris įgalins testų atvejų valdymą"
+  text_select_testcase_trackers: "Pasirinkite sekiklius, kurie įjungia testų atvejus. Palikite visus nepažymėtus, kad funkcija būtų išjungta."
   text_no_tracker_selected: "Nepasirinktas sekiklis - testų atvejų funkcionalumas išjungtas"
 
   # Test Cases tab and general labels

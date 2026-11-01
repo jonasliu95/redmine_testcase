@@ -7,9 +7,9 @@ en:
   permission_manage_test_cases: "Manage test cases"
 
   # Settings
-  label_testcase_tracker: "Test Case Tracker"
+  label_testcase_trackers: "Test Case Trackers"
   label_testcase_settings: "Test Case Settings"
-  text_select_testcase_tracker: "Select the tracker that will enable test case management"
+  text_select_testcase_trackers: "Select the trackers that enable test cases. Leave all unchecked to disable the feature."
   text_no_tracker_selected: "No tracker selected - test case functionality is disabled"
 
   # Test Cases tab and general labels

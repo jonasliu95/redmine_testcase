@@ -7,9 +7,9 @@ ru:
   permission_manage_test_cases: "Управление тест-кейсами"
 
   # Settings
-  label_testcase_tracker: "Трекер тест-кейсов"
+  label_testcase_trackers: "Test Case Trackers"
   label_testcase_settings: "Настройки тест-кейсов"
-  text_select_testcase_tracker: "Выберите трекер, который включит управление тест-кейсами"
+  text_select_testcase_trackers: "Select the trackers that enable test cases. Leave all unchecked to disable the feature."
   text_no_tracker_selected: "Трекер не выбран - функциональность тест-кейсов отключена"
 
   # Test Cases tab and general labels
